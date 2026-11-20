@@ -1,0 +1,30 @@
+[
+  {
+    "suite": "libero_spatial",
+    "task_id": 0,
+    "name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+    "category": "stage3_seed_tasks",
+    "initial_state_count": 50
+  },
+  {
+    "suite": "libero_object",
+    "task_id": 0,
+    "name": "pick_up_the_alphabet_soup_and_place_it_in_the_basket",
+    "category": "stage3_seed_tasks",
+    "initial_state_count": 50
+  },
+  {
+    "suite": "libero_goal",
+    "task_id": 0,
+    "name": "open_the_middle_drawer_of_the_cabinet",
+    "category": "stage3_seed_tasks",
+    "initial_state_count": 50
+  },
+  {
+    "suite": "libero_10",
+    "task_id": 0,
+    "name": "LIVING_ROOM_SCENE2_put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket",
+    "category": "stage3_seed_tasks",
+    "initial_state_count": 50
+  }
+]

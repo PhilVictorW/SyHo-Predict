@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round8/train.py", line 109, in main
+    assert all(torch.equal(x,y) for x,y in zip(c0,cg))
+AssertionError

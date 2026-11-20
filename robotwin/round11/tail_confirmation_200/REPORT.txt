@@ -1,0 +1,195 @@
+Three-way held-out continuation confirmation
+Offline action errors; not a closed-loop success rate.
+Online eligible candidates: {'uniform': False, 'tail': False}
+
+fresh
+{
+  "uniform_vs_base": {
+    "ratios": {
+      "position_cm": 1.0127907644252852,
+      "rotation_deg": 0.9965166315176472,
+      "gripper_mae": 0.9990020428777957
+    },
+    "normalized_excess": 0.002769812940242704,
+    "bootstrap_95": [
+      -0.0026235540375197687,
+      0.007906782718675938
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "tail_vs_base": {
+    "ratios": {
+      "position_cm": 1.0102358347034974,
+      "rotation_deg": 0.9948800161801767,
+      "gripper_mae": 1.0043518598034789
+    },
+    "normalized_excess": 0.0031559035623843156,
+    "bootstrap_95": [
+      -0.000328500792078591,
+      0.006564118676981532
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  }
+}
+
+tail
+{
+  "uniform_vs_base": {
+    "ratios": {
+      "position_cm": 1.0254509482164482,
+      "rotation_deg": 0.997498123963178,
+      "gripper_mae": 0.9930239618193166
+    },
+    "normalized_excess": 0.005324344666314276,
+    "bootstrap_95": [
+      -0.006156108380159681,
+      0.018203285026741973
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "tail_vs_base": {
+    "ratios": {
+      "position_cm": 1.0219840298578293,
+      "rotation_deg": 1.0073677926035445,
+      "gripper_mae": 1.0082213313240924
+    },
+    "normalized_excess": 0.0125243845951554,
+    "bootstrap_95": [
+      -0.00524577540469598,
+      0.036466190380359885
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_1
+{
+  "uniform_vs_base": {
+    "ratios": {
+      "position_cm": 1.0839427633343093,
+      "rotation_deg": 1.0303420678531636,
+      "gripper_mae": 1.230250306457353
+    },
+    "normalized_excess": 0.11484504588160867,
+    "bootstrap_95": [
+      -0.04660147408823831,
+      0.25977037097655953
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "tail_vs_base": {
+    "ratios": {
+      "position_cm": 1.0710414682523797,
+      "rotation_deg": 1.0522003345421336,
+      "gripper_mae": 1.2151449246708055
+    },
+    "normalized_excess": 0.11279557582177292,
+    "bootstrap_95": [
+      -0.15023919476978223,
+      0.3442132890454732
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_8
+{
+  "uniform_vs_base": {
+    "ratios": {
+      "position_cm": 1.0567697193176127,
+      "rotation_deg": 0.9440588443397633,
+      "gripper_mae": 0.8365555528804044
+    },
+    "normalized_excess": -0.054205294487406554,
+    "bootstrap_95": [
+      -0.12390283828735604,
+      0.008709303775621851
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "tail_vs_base": {
+    "ratios": {
+      "position_cm": 1.0586850553732605,
+      "rotation_deg": 0.9745128091487342,
+      "gripper_mae": 1.1031589014870058
+    },
+    "normalized_excess": 0.045452255336333486,
+    "bootstrap_95": [
+      -0.031491764719851496,
+      0.12853948938912518
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_24
+{
+  "uniform_vs_base": {
+    "ratios": {
+      "position_cm": 0.9891194258142658,
+      "rotation_deg": 1.0030268378923934,
+      "gripper_mae": 0.9745980298108078
+    },
+    "normalized_excess": -0.011085235494177677,
+    "bootstrap_95": [
+      -0.03506584823727376,
+      0.01047384278300129
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "tail_vs_base": {
+    "ratios": {
+      "position_cm": 0.9811248443218104,
+      "rotation_deg": 1.0074229380492532,
+      "gripper_mae": 0.9745880579856743
+    },
+    "normalized_excess": -0.012288053214420728,
+    "bootstrap_95": [
+      -0.02540222206638615,
+      0.0010333437867682835
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_36
+{
+  "uniform_vs_base": {
+    "ratios": {
+      "position_cm": 1.005352551299044,
+      "rotation_deg": 1.0046251922181093,
+      "gripper_mae": 0.9945879367229358
+    },
+    "normalized_excess": 0.0015218934133630411,
+    "bootstrap_95": [
+      -0.004730528315655796,
+      0.008397091264317208
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "tail_vs_base": {
+    "ratios": {
+      "position_cm": 1.007589615886021,
+      "rotation_deg": 1.0001939074012869,
+      "gripper_mae": 1.001431639535358
+    },
+    "normalized_excess": 0.003071720940888583,
+    "bootstrap_95": [
+      -0.0031818872990304935,
+      0.009312118654107467
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  }
+}

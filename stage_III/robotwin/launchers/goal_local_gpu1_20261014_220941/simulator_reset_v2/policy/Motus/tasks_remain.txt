@@ -1,0 +1,9 @@
+scan_object
+shake_bottle
+shake_bottle_horizontally
+stack_blocks_three
+stack_blocks_two
+stack_bowls_three
+stack_bowls_two
+stamp_seal
+turn_switch

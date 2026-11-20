@@ -1,0 +1,845 @@
+{
+  "archive": "Phil-V/SyHo-Predict-models",
+  "files": [
+    {
+      "archive_path": "SyHo-Predict/LIBERO/base_model/.gitattributes",
+      "root": "assets",
+      "destination": "results/Checkpoints/libero/lawam_libero_sft_release/.gitattributes",
+      "size": 1519
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/base_model/README.md",
+      "root": "assets",
+      "destination": "results/Checkpoints/libero/lawam_libero_sft_release/README.md",
+      "size": 1770
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/base_model/config.yaml",
+      "root": "assets",
+      "destination": "results/Checkpoints/libero/lawam_libero_sft_release/config.yaml",
+      "size": 1797
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/base_model/dataset_statistics.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/libero/lawam_libero_sft_release/dataset_statistics.json",
+      "size": 2736
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/base_model/final_model/pytorch_model.pt",
+      "root": "assets",
+      "destination": "results/Checkpoints/libero/lawam_libero_sft_release/final_model/pytorch_model.pt",
+      "size": 7174214645
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/base_model/.gitattributes",
+      "root": "assets",
+      "destination": "results/Checkpoints/robotwin/lawam_robotwin_sft_release/.gitattributes",
+      "size": 1519
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/base_model/README.md",
+      "root": "assets",
+      "destination": "results/Checkpoints/robotwin/lawam_robotwin_sft_release/README.md",
+      "size": 1892
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/base_model/config.yaml",
+      "root": "assets",
+      "destination": "results/Checkpoints/robotwin/lawam_robotwin_sft_release/config.yaml",
+      "size": 1773
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/base_model/dataset_statistics.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/robotwin/lawam_robotwin_sft_release/dataset_statistics.json",
+      "size": 5896
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/base_model/final_model/pytorch_model.pt",
+      "root": "assets",
+      "destination": "results/Checkpoints/robotwin/lawam_robotwin_sft_release/final_model/pytorch_model.pt",
+      "size": 7174214645
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/README.md",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/README.md",
+      "size": 7136
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/chat_template.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/chat_template.json",
+      "size": 5502
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/config.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/config.json",
+      "size": 1505
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/generation_config.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/generation_config.json",
+      "size": 269
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/merges.txt",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/merges.txt",
+      "size": 1671839
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/preprocessor_config.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/preprocessor_config.json",
+      "size": 390
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/tokenizer.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/tokenizer.json",
+      "size": 7032403
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/tokenizer_config.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/tokenizer_config.json",
+      "size": 10868
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/video_preprocessor_config.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/video_preprocessor_config.json",
+      "size": 385
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/qwen/vocab.json",
+      "root": "assets",
+      "destination": "results/Checkpoints/qwen3_weights/vocab.json",
+      "size": 2776833
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/dino/config.json",
+      "root": "assets",
+      "destination": "weights/dinov3-vitb16-pretrain-lvd1689m/config.json",
+      "size": 733
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/dino/conversion_info.json",
+      "root": "assets",
+      "destination": "weights/dinov3-vitb16-pretrain-lvd1689m/conversion_info.json",
+      "size": 389
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/backbone_configs/dino/preprocessor_config.json",
+      "root": "assets",
+      "destination": "weights/dinov3-vitb16-pretrain-lvd1689m/preprocessor_config.json",
+      "size": 623
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/teacher_step_002000/model.pt",
+      "root": "repo",
+      "destination": "runs/goal_local/teachers/stage_I_step_002000/model.pt",
+      "size": 5237316932
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/teacher_step_002000/processor/chat_template.jinja",
+      "root": "repo",
+      "destination": "runs/goal_local/teachers/stage_I_step_002000/processor/chat_template.jinja",
+      "size": 5292
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/teacher_step_002000/processor/processor_config.json",
+      "root": "repo",
+      "destination": "runs/goal_local/teachers/stage_I_step_002000/processor/processor_config.json",
+      "size": 1300
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/teacher_step_002000/processor/tokenizer.json",
+      "root": "repo",
+      "destination": "runs/goal_local/teachers/stage_I_step_002000/processor/tokenizer.json",
+      "size": 11423003
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/teacher_step_002000/processor/tokenizer_config.json",
+      "root": "repo",
+      "destination": "runs/goal_local/teachers/stage_I_step_002000/processor/tokenizer_config.json",
+      "size": 437
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/teacher_step_002000/source.json",
+      "root": "repo",
+      "destination": "runs/goal_local/teachers/stage_I_step_002000/source.json",
+      "size": 243
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/student_step_004000/checkpoint_complete.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/step_004000/checkpoint_complete.json",
+      "size": 49
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/student_step_004000/model.pt",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/step_004000/model.pt",
+      "size": 5509951332
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/student_step_004000/processor/chat_template.jinja",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/step_004000/processor/chat_template.jinja",
+      "size": 5292
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/student_step_004000/processor/processor_config.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/step_004000/processor/processor_config.json",
+      "size": 1300
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/student_step_004000/processor/tokenizer.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/step_004000/processor/tokenizer.json",
+      "size": 11423003
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/student_step_004000/processor/tokenizer_config.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/step_004000/processor/tokenizer_config.json",
+      "size": 437
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/teacher_step_005000/model.pt",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/retained_checkpoints/step_005000/model.pt",
+      "size": 5237318532
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/teacher_step_005000/processor/chat_template.jinja",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/retained_checkpoints/step_005000/processor/chat_template.jinja",
+      "size": 5292
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/teacher_step_005000/processor/processor_config.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/retained_checkpoints/step_005000/processor/processor_config.json",
+      "size": 1300
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/teacher_step_005000/processor/tokenizer.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/retained_checkpoints/step_005000/processor/tokenizer.json",
+      "size": 11423003
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/teacher_step_005000/processor/tokenizer_config.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/retained_checkpoints/step_005000/processor/tokenizer_config.json",
+      "size": 437
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/teacher_step_005000/retention_complete.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/retained_checkpoints/step_005000/retention_complete.json",
+      "size": 165
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/action_semantics.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/action_semantics.json",
+      "size": 275
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/checkpoint_complete.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/checkpoint_complete.json",
+      "size": 80
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/eval_snapshot_complete.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/eval_snapshot_complete.json",
+      "size": 70
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/model.pt",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/model.pt",
+      "size": 5509951588
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/processor/chat_template.jinja",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/processor/chat_template.jinja",
+      "size": 5292
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/processor/processor_config.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/processor/processor_config.json",
+      "size": 1300
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/processor/tokenizer.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/processor/tokenizer.json",
+      "size": 11423003
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/processor/tokenizer_config.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/processor/tokenizer_config.json",
+      "size": 437
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/student_step_004000/resume.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/step_004000/resume.json",
+      "size": 160
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/legacy_teacher_step_001000/checkpoint_complete.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/step_001000/checkpoint_complete.json",
+      "size": 49
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/legacy_teacher_step_001000/model.pt",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/step_001000/model.pt",
+      "size": 5237327748
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/legacy_teacher_step_001000/processor/chat_template.jinja",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/step_001000/processor/chat_template.jinja",
+      "size": 5292
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/legacy_teacher_step_001000/processor/processor_config.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/step_001000/processor/processor_config.json",
+      "size": 1300
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/legacy_teacher_step_001000/processor/tokenizer.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/step_001000/processor/tokenizer.json",
+      "size": 11423003
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/legacy_teacher_step_001000/processor/tokenizer_config.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/step_001000/processor/tokenizer_config.json",
+      "size": 437
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/legacy_student_step_003000/checkpoint_complete.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/step_003000/checkpoint_complete.json",
+      "size": 99
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/legacy_student_step_003000/model.pt",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/step_003000/model.pt",
+      "size": 5509952548
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/legacy_student_step_003000/processor/chat_template.jinja",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/step_003000/processor/chat_template.jinja",
+      "size": 5292
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/legacy_student_step_003000/processor/processor_config.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/step_003000/processor/processor_config.json",
+      "size": 1300
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/legacy_student_step_003000/processor/tokenizer.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/step_003000/processor/tokenizer.json",
+      "size": 11423003
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/legacy_student_step_003000/processor/tokenizer_config.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/step_003000/processor/tokenizer_config.json",
+      "size": 437
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/training/config.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_I_20260921/config.json",
+      "size": 1865
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/training/arguments.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_I_20260921/arguments.json",
+      "size": 439
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/training/dataset_audit.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_I_20260921/dataset_audit.json",
+      "size": 1297
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_I/training/status.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_I_20260921/status.json",
+      "size": 327
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/training/config.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/config.json",
+      "size": 1865
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/training/arguments.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/arguments.json",
+      "size": 594
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/training/teacher_source.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/teacher_source.json",
+      "size": 267
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_II/training/warm_start.json",
+      "root": "repo",
+      "destination": "runs/goal_local/stage_II_warm250_20260921/warm_start.json",
+      "size": 213
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/training/config.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/config.json",
+      "size": 1981
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/training/arguments.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/arguments.json",
+      "size": 432
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/training/dataset_audit.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/dataset_audit.json",
+      "size": 8279
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_I/training/status.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_I_20260923/status.json",
+      "size": 538
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/training/config.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/config.json",
+      "size": 1981
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/training/arguments.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/arguments.json",
+      "size": 570
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/training/teacher_source.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/teacher_source.json",
+      "size": 356
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/training/dataset_audit.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/dataset_audit.json",
+      "size": 675
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_II/training/stopped_at_004000.json",
+      "root": "repo",
+      "destination": "libero-plus/runs/stage_II_20260925/stopped_at_004000.json",
+      "size": 425
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/training/config.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/config.json",
+      "size": 1999
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/training/arguments.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/arguments.json",
+      "size": 488
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/training/dataset_audit.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_I_20260924/dataset_audit.json",
+      "size": 15736
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/training/arguments.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/arguments.json",
+      "size": 494
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/training/teacher_source.json",
+      "root": "repo",
+      "destination": "robotwin/runs/stage_II_20260925/teacher_source.json",
+      "size": 321
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/SHA256SUMS",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/SHA256SUMS",
+      "size": 651
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/actor_final.pt",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/actor_final.pt",
+      "size": 18890970
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/archive.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/archive.json",
+      "size": 945
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/baseline_snapshot.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/baseline_snapshot.json",
+      "size": 1791
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/config.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/config.json",
+      "size": 1102
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/group_summary.jsonl",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/group_summary.jsonl",
+      "size": 143200
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/manifest.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/manifest.json",
+      "size": 239454
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/metrics.jsonl",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/metrics.jsonl",
+      "size": 29242
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_01/status.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_01_full800_20261013/status.json",
+      "size": 4247
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/SHA256SUMS",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/SHA256SUMS",
+      "size": 651
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/actor_final.pt",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/actor_final.pt",
+      "size": 18890970
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/archive.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/archive.json",
+      "size": 932
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/baseline_snapshot.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/baseline_snapshot.json",
+      "size": 1791
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/config.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/config.json",
+      "size": 1097
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/group_summary.jsonl",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/group_summary.jsonl",
+      "size": 143313
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/manifest.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/manifest.json",
+      "size": 239454
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/metrics.jsonl",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/metrics.jsonl",
+      "size": 29176
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_02/status.json",
+      "root": "repo",
+      "destination": "stage_III/libero/checkpoints/round_02_full800_20261014/status.json",
+      "size": 4251
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_03/actor_update_0025.pt",
+      "root": "repo",
+      "destination": "stage_III/libero/runs/grpo_full800_round3_20261014_102308/checkpoints/actor_update_0025.pt",
+      "size": 18890906
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_03/config.json",
+      "root": "repo",
+      "destination": "stage_III/libero/runs/grpo_full800_round3_20261014_102308/config.json",
+      "size": 1013
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_03/continuation.json",
+      "root": "repo",
+      "destination": "stage_III/libero/runs/grpo_full800_round3_20261014_102308/continuation.json",
+      "size": 2011
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/Stage_III/round_03/status.json",
+      "root": "repo",
+      "destination": "stage_III/libero/runs/grpo_full800_round3_20261014_102308/status.json",
+      "size": 3515
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_III/round_01/actor_update_0262.pt",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/runs/grpo_full8380_20261013_010306/checkpoints/actor_update_0262.pt",
+      "size": 18891098
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_III/round_01/config.json",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/runs/grpo_full8380_20261013_010306/config.json",
+      "size": 1190
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_III/round_01/status.json",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/runs/grpo_full8380_20261013_010306/status.json",
+      "size": 3352
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_III/round_02_paused/actor_current.pt",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/runs/grpo_round2_full8380_20261018_211335/checkpoints/actor_current.pt",
+      "size": 18891098
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_III/round_02_paused/lineage.json",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/runs/grpo_round2_full8380_20261018_211335/lineage.json",
+      "size": 1865
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/Stage_III/round_02_paused/status.json",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/runs/grpo_round2_full8380_20261018_211335/status.json",
+      "size": 3723
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/deployment_adapters/round4_future_aux_step_000200/adapter.pt",
+      "root": "repo",
+      "destination": "robotwin/round4/runs/future_aux/step_000200/adapter.pt",
+      "size": 2503716382
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/deployment_adapters/round4_future_aux_step_000200/checkpoint_complete.json",
+      "root": "repo",
+      "destination": "robotwin/round4/runs/future_aux/step_000200/checkpoint_complete.json",
+      "size": 93
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/deployment_adapters/round6_control_step_000200/adapter.pt",
+      "root": "repo",
+      "destination": "robotwin/round6/runs/control/step_000200/adapter.pt",
+      "size": 2503648754
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_I/deployment_adapters/round6_control_step_000200/checkpoint_complete.json",
+      "root": "repo",
+      "destination": "robotwin/round6/runs/control/step_000200/checkpoint_complete.json",
+      "size": 93
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/deployment_initialization/initializers.pt",
+      "root": "repo",
+      "destination": "robotwin/round7/audit/initializers.pt",
+      "size": 541774602
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_II/deployment_initialization/candidate_recipe.json",
+      "root": "repo",
+      "destination": "robotwin/round7/candidate_recipe.json",
+      "size": 2085
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/base_model/adaptation_config.json",
+      "root": "repo",
+      "destination": "robotwin/configs/stage_I.json",
+      "size": 2000
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/interaction/student_000200.pt",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_gpu1_20261014_220941/interaction/checkpoints/student_000200.pt",
+      "size": 2166057462
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/rl/actor_0100.pt",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_resetv2_20261015_1238/rl/checkpoints/actor_0100.pt",
+      "size": 18898531
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/interaction/base_snapshot.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_gpu1_20261014_220941/interaction/base_snapshot.json",
+      "size": 6100
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/interaction/sampling.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_gpu1_20261014_220941/interaction/sampling.json",
+      "size": 301930
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/interaction/status.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_gpu1_20261014_220941/interaction/status.json",
+      "size": 257
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/rl/status.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_resetv2_20261015_1238/rl/status.json",
+      "size": 1248
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/rl/train_manifest.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_resetv2_20261015_1238/rl/train_manifest.json",
+      "size": 233847
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/Stage_III/rl/schedule.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/runs/goal_local_resetv2_20261015_1238/rl/schedule.json",
+      "size": 20500
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/evaluation/quick_40x10/summary.json",
+      "root": "repo",
+      "destination": "results/goal_local/libero_40x10/step_004000/summary.json",
+      "size": 6008
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/evaluation/quick_40x10/protocol.json",
+      "root": "repo",
+      "destination": "results/goal_local/libero_40x10/protocol.json",
+      "size": 1650
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/evaluation/three_rounds_40x50/comparison.json",
+      "root": "repo",
+      "destination": "stage_III/result/libero/full40x50_20261014_201831/comparison.json",
+      "size": 4149
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/evaluation/three_rounds_40x50/launch_manifest.json",
+      "root": "repo",
+      "destination": "stage_III/result/libero/full40x50_20261014_201831/launch_manifest.json",
+      "size": 2215
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO/evaluation/three_rounds_40x50/taskwise_best_of_three.json",
+      "root": "repo",
+      "destination": "stage_III/result/libero/full40x50_20261014_201831/taskwise_best_of_three.json",
+      "size": 23111
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/evaluation/stage_II_8380/results.json",
+      "root": "repo",
+      "destination": "libero-plus/evaluation/stage_II_steps2500_4000_parallel_20261008/step_004000/step_004000_step500_stratified_gripper_v1/results.json",
+      "size": 12204
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/evaluation/stage_II_full10030/results.json",
+      "root": "repo",
+      "destination": "libero-plus/evaluation/stage_II_20260925/step_004000_gripper_v1/results.json",
+      "size": 6167
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/evaluation/stage_III_round1_8380/results.json",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/evaluation/round1_full8380_20261017_2319/results.json",
+      "size": 7061
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/evaluation/stage_III_round1_8380/protocol.json",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/evaluation/round1_full8380_20261017_2319/protocol.json",
+      "size": 2035764
+    },
+    {
+      "archive_path": "SyHo-Predict/LIBERO-PLUS/evaluation/stage_III_round1_8380/model_bundle.json",
+      "root": "repo",
+      "destination": "stage_III/libero_plus/evaluation/round1_full8380_20261017_2319/model_bundle.json",
+      "size": 1065
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/evaluation/final_actor100/summary.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/evaluation/final_actor100_gpu5_20261023_014920/summary.json",
+      "size": 470785
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/evaluation/final_actor100/manifest.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/evaluation/final_actor100_gpu5_20261023_014920/manifest.json",
+      "size": 112793
+    },
+    {
+      "archive_path": "SyHo-Predict/ROBOTWIN/evaluation/final_actor100/config.json",
+      "root": "repo",
+      "destination": "stage_III/robotwin/evaluation/final_actor100_gpu5_20261023_014920/config.json",
+      "size": 3565
+    }
+  ]
+}

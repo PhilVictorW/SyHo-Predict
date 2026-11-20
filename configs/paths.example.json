@@ -1,0 +1,12 @@
+{
+  "asset_root": "/path/to/external/LaWAM",
+  "model_env": "/path/to/envs/LaWAM",
+  "libero_eval_env": "/path/to/envs/LIBERO4LaWAM",
+  "libero_train_env": "/path/to/envs/LIBERO",
+  "plus_env": "/path/to/envs/libero-plus",
+  "robotwin_env": "/path/to/envs/RoboTwin4LaWAM",
+  "plus_indexed_data": "/path/to/data/libero-plus/indexed_rlds",
+  "robotwin_sim_root": "/path/to/RoboTwin",
+  "cache_root": "/path/to/cache/syho",
+  "legacy_root": "/path/to/optional/historical-artifacts"
+}

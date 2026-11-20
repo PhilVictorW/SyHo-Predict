@@ -1,0 +1,26 @@
+# Motus Evaluation Path Configuration
+# Paths needed for inference
+
+# ============================================================================
+# Core Paths - MUST MODIFY THESE
+# ============================================================================
+robotwin_root: "/mnt/hdd/wangchaoyang/RoboTwin"
+conda_env: "/home/wangchaoyang/envs/motu_robo"
+checkpoint_path: "/mnt/hdd/wangchaoyang/CKPT/Motus/models/Motus_robotwin2"
+result_root: "/mnt/hdd/wangchaoyang/results/Motus"
+
+# Pretrained model paths (only for loading configs, not weights)
+wan_path: "/mnt/hdd/wangchaoyang/CKPT/Motus/models/Wan2.2-TI2V-5B"
+vlm_path: "/mnt/hdd/wangchaoyang/CKPT/Motus/models/Qwen3-VL-2B-Instruct"
+
+# ============================================================================
+# Optional Configuration
+# ============================================================================
+# GPU IDs (empty means auto-detect)
+gpu_ids: [1,2,3,6]  # GPU6/7 currently reserved by other jobs
+
+# Task configuration
+task_config: "demo_randomized_motus"
+seed: 42
+test_num: 30
+tasks_file: "tasks_remain.txt"

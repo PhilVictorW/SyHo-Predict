@@ -1,0 +1,14 @@
+{
+  "physical_gpus": [
+    1,
+    3
+  ],
+  "effective_batch": 32,
+  "files": {
+    "runtime/train_ddp.py": "85fa300ac7bf3298f43785462e70f5ac10f599549addbeef9b1e93b485757f61",
+    "runtime/test_ddp.py": "b9b2780566ad5432e2c9364d4c3e7eacf45950e48af61ba2590b150f9a92bb5d",
+    "runtime/monitor.py": "43d72e67c1a7981f5b9ebf49ee07e05bfa3296ff3b760e42bf0291d603cc041c",
+    "launch_stage_I.sh": "df6150ffe92a6178bc5a81df72cfd048eb1046a27b06e40c3dcb162fe1388178",
+    "env.sh": "8196577f5fe20f0598abd270dd7a7d9834d97d379c813696ca25b3ba8d018811"
+  }
+}

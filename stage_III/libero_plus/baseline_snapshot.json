@@ -1,0 +1,20 @@
+{
+  "stage3_status": "isolated_initialization",
+  "base_student": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/libero-plus/runs/stage_II_20260925/step_004000",
+  "base_student_model_sha256": "28eca203789d72d425d0221c8c5221b42b9563b860237a7da3389d24c85c69db",
+  "base_student_marker_sha256": "35cfa6f3a5c2a44a8aba6a6417fceedfde4d32853a82fcf493266b78b54cb0b7",
+  "base_student_action_semantics_sha256": "168d283dc7394fbec1399c0741435cd5319c6bd037af8c9e212de1d08a0f07b3",
+  "checkpoint_marker": {
+    "step": 4000,
+    "stage": "II",
+    "teacher_step": 5000,
+    "mode": "student"
+  },
+  "action_protocol": "libero_plus_open_to_legacy_close_v1",
+  "baseline_result": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/libero-plus/evaluation/stage_II_steps2500_4000_parallel_20261008/step_004000/step_004000_step500_stratified_gripper_v1/results.json",
+  "baseline_result_sha256": "73f2057f20287b3641e63431248ccd626f3f1dc1237f5f1bfa0466deb1131ff3",
+  "teacher_source": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/libero-plus/runs/stage_I_20260923/retained_checkpoints/step_005000",
+  "sft_dataset": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_without_subgoal/libero-plus/data/indexed_rlds",
+  "inference_benchmark": "/mnt/hdd/wangchaoyang/CKPT/LaWAM/dataset/libero-plus/inference/LIBERO-plus",
+  "preservation_rule": "Stage III writes only under stage_III/libero_plus; Stage-I/II checkpoints and prior evaluation outputs are read-only."
+}

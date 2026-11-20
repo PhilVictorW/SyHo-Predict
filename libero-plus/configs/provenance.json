@@ -1,0 +1,16 @@
+{
+  "source_config": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/configs/goal_local/stage_I.json",
+  "baseline": "/mnt/hdd/wangchaoyang/CKPT/LaWAM/results/Checkpoints/libero/lawam_libero_sft_release/final_model/pytorch_model.pt",
+  "source_manifest_sha256": "f41bac851b76ef60ec233fd19ae7d3dfd4923812406767e5c6e7e26a61d9957f",
+  "code_sha256": {
+    "goal_local/model.py": "50d2e0eb97f1fafb37431cfeda974b4f1787883a9e2e42ca8bc1b1ba40a397b7",
+    "goal_local/roles.py": "f84ce3e0d9d7e1a10ce0646758e03b27037ad05146b3505110f0f0224a717159",
+    "goal_local/action.py": "d85aff27148b39ac843407beeb3bb120d531ad52aa41d5cd6327e8c2c47191c0",
+    "goal_local/train.py": "92efc7ab54857fad221fc0c888a92970d5010cc4a72d9bff9363a0d1d620c0c3",
+    "goal_local/data.py": "60e841836dbc89252584d70a4363704b7dddd6df8dd3a2a6e72ed34492de89f1",
+    "goal_local/optim.py": "da1a716f4fc7da2419e7ff501d49d089fd9770c2131aee75a312137f6226eeb5",
+    "libero-plus/runtime/indexed_future.py": "bf842b41fafa1ca99092b560e0350a11740872eb575a2975593a25a9db8261dd",
+    "libero-plus/runtime/train.py": "7d6d3a5632f7f20f5f180443a7fd12fde49c9ba5476d70aa2aba50ff39b9e08b",
+    "libero-plus/runtime/verify.py": "cc33e7f56fb3b4b4d9369498b2b43d1dbb3900d91c3673389d7b36933855aa6f"
+  }
+}

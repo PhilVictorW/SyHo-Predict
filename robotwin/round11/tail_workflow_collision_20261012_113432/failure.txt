@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round11/tail_workflow.py", line 43, in main
+    child=launch(mode);update(phase='training',mode=mode,step=0,child=read(OUT/f'{mode}_process.json'))
+          ^^^^^^^^^^^^
+  File "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round11/tail_workflow.py", line 34, in launch
+    rec=ident(child.pid);assert rec and f'-m {MOD}' in rec['command'];write(OUT/f'{mode}_process.json',rec);return child
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,5 @@
+assets: /mnt/hdd/wangchaoyang/CKPT/LaWAM/dataset/libero-plus/inference/LIBERO-plus/libero/libero/assets
+bddl_files: /mnt/hdd/wangchaoyang/CKPT/LaWAM/dataset/libero-plus/inference/LIBERO-plus/libero/libero/bddl_files
+benchmark_root: /mnt/hdd/wangchaoyang/CKPT/LaWAM/dataset/libero-plus/inference/LIBERO-plus/libero/libero
+datasets: /mnt/hdd/wangchaoyang/LatentWAM/LaWAM_without_subgoal/libero-plus/data
+init_states: /mnt/hdd/wangchaoyang/CKPT/LaWAM/dataset/libero-plus/inference/LIBERO-plus/libero/libero/init_files

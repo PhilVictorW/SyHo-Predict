@@ -1,0 +1,18 @@
+# Basic experiment configuration (keep unchanged)
+policy_name: null
+task_name: null
+task_config: null
+ckpt_setting: null
+seed: null
+test_num: null
+instruction_type: unseen
+log_dir: null
+result_root: null
+wan_path: null
+vlm_path: null
+save_images: false
+success_video_only: null
+quantization_dir: null
+
+# LAWM Parameters
+model_config: robotwin.yml

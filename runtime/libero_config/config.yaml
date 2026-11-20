@@ -1,0 +1,5 @@
+benchmark_root: /mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2/runtime/LIBERO/libero/libero
+bddl_files: /mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2/runtime/LIBERO/libero/libero/./bddl_files
+init_states: /mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2/runtime/LIBERO/libero/libero/./init_files
+datasets: /mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2/runtime/LIBERO/libero/libero/../datasets
+assets: /mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2/runtime/LIBERO/libero/libero/./assets

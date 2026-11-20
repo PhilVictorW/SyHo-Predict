@@ -1,0 +1,363 @@
+200-step action adapter independent confirmation
+Online eligible: False
+Offline errors; not a closed-loop success rate.
+
+fresh: 32 independent episodes
+{
+  "adapter200_vs_initial": {
+    "ratios": {
+      "position_cm": 0.9930297664425685,
+      "rotation_deg": 0.9631717936123284,
+      "gripper_mae": 1.0111441209647567
+    },
+    "normalized_excess": -0.010884772993448795,
+    "bootstrap_95": [
+      -0.018896375933244336,
+      -0.002946403929169681
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": true
+  },
+  "goal_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.0052180483652629,
+      "rotation_deg": 0.9991099800363915,
+      "gripper_mae": 1.0207914540294483
+    },
+    "normalized_excess": 0.008373160810367548,
+    "bootstrap_95": [
+      0.0036097814493771772,
+      0.013204879936840146
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "local_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.3681557109444666,
+      "rotation_deg": 1.207341881307647,
+      "gripper_mae": 1.750877449360522
+    },
+    "normalized_excess": 0.44212501387087855,
+    "bootstrap_95": [
+      0.41399239606243804,
+      0.4704392554009891
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "roles_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.3713151677636517,
+      "rotation_deg": 1.2060150594666061,
+      "gripper_mae": 1.7574044297296905
+    },
+    "normalized_excess": 0.4449115523199828,
+    "bootstrap_95": [
+      0.41678534946646373,
+      0.4731459462054623
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}
+
+tail: 8 independent episodes
+{
+  "adapter200_vs_initial": {
+    "ratios": {
+      "position_cm": 0.9758642332468624,
+      "rotation_deg": 1.0013171104505043,
+      "gripper_mae": 1.0012992029209928
+    },
+    "normalized_excess": -0.0071731511272134915,
+    "bootstrap_95": [
+      -0.019453671632728077,
+      0.0036422368598473982
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "goal_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.0199379073016128,
+      "rotation_deg": 1.0049396959589645,
+      "gripper_mae": 1.0844749706060528
+    },
+    "normalized_excess": 0.036450857955543405,
+    "bootstrap_95": [
+      0.013976488657063553,
+      0.06655465225051947
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "local_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.3591098222648068,
+      "rotation_deg": 1.233987784042256,
+      "gripper_mae": 1.8989166613654043
+    },
+    "normalized_excess": 0.4973380892241556,
+    "bootstrap_95": [
+      0.4601253704166184,
+      0.5334218874142792
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "roles_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.3421071732303003,
+      "rotation_deg": 1.2277603271199535,
+      "gripper_mae": 1.9055639597093394
+    },
+    "normalized_excess": 0.49181048668653105,
+    "bootstrap_95": [
+      0.45680917700793483,
+      0.527686863660152
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_1: 8 independent episodes
+{
+  "adapter200_vs_initial": {
+    "ratios": {
+      "position_cm": 0.9372825219944793,
+      "rotation_deg": 0.9738035729873048,
+      "gripper_mae": 0.7426713732768697
+    },
+    "normalized_excess": -0.11541417724711542,
+    "bootstrap_95": [
+      -0.21878803052009602,
+      -0.019926590884669748
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": true
+  },
+  "goal_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.0676872786256069,
+      "rotation_deg": 1.0593883619508582,
+      "gripper_mae": 1.9912926568863933
+    },
+    "normalized_excess": 0.3727894324876195,
+    "bootstrap_95": [
+      0.11133317032811926,
+      0.7278711555382814
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "local_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.5090009969850409,
+      "rotation_deg": 1.4564747490301617,
+      "gripper_mae": 8.403052710664715
+    },
+    "normalized_excess": 2.789509485559973,
+    "bootstrap_95": [
+      2.1063619645882983,
+      3.5032421447069635
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "roles_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.4068672603219954,
+      "rotation_deg": 1.4060375853377607,
+      "gripper_mae": 8.944774407845308
+    },
+    "normalized_excess": 2.9192264178350213,
+    "bootstrap_95": [
+      2.3036078838038407,
+      3.538251446728818
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_8: 8 independent episodes
+{
+  "adapter200_vs_initial": {
+    "ratios": {
+      "position_cm": 0.941591646209894,
+      "rotation_deg": 1.0313773047034571,
+      "gripper_mae": 1.0643683869154816
+    },
+    "normalized_excess": 0.012445779276277564,
+    "bootstrap_95": [
+      -0.0517893163124668,
+      0.07340722653846657
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "goal_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.034945862530996,
+      "rotation_deg": 0.9911174807062643,
+      "gripper_mae": 1.40793739482159
+    },
+    "normalized_excess": 0.14466691268628343,
+    "bootstrap_95": [
+      -0.023377400104864776,
+      0.3772346115777581
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "local_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.6017025012292143,
+      "rotation_deg": 1.259176306650358,
+      "gripper_mae": 6.619263910947355
+    },
+    "normalized_excess": 2.160047572942309,
+    "bootstrap_95": [
+      1.7559367877399659,
+      2.510619778032079
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "roles_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.6044092478255185,
+      "rotation_deg": 1.2738838123843848,
+      "gripper_mae": 6.576330779301968
+    },
+    "normalized_excess": 2.1515412798372906,
+    "bootstrap_95": [
+      1.7905486829610835,
+      2.459173130598999
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_24: 8 independent episodes
+{
+  "adapter200_vs_initial": {
+    "ratios": {
+      "position_cm": 0.9997435266094167,
+      "rotation_deg": 1.0147931056826345,
+      "gripper_mae": 1.038815764343057
+    },
+    "normalized_excess": 0.017784132211702698,
+    "bootstrap_95": [
+      -0.0038280604636827774,
+      0.04042052080059823
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "goal_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 0.9901786271876284,
+      "rotation_deg": 0.9876435878487064,
+      "gripper_mae": 1.099686919678713
+    },
+    "normalized_excess": 0.025836378238349243,
+    "bootstrap_95": [
+      -0.0017825941977016933,
+      0.054146851423553286
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "local_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.2579650675394711,
+      "rotation_deg": 1.176093492855293,
+      "gripper_mae": 2.389119916512302
+    },
+    "normalized_excess": 0.607726158969022,
+    "bootstrap_95": [
+      0.5482904574784488,
+      0.6686550087041578
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "roles_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.2519406643558137,
+      "rotation_deg": 1.1752606772671117,
+      "gripper_mae": 2.3459246405150878
+    },
+    "normalized_excess": 0.5910419940460044,
+    "bootstrap_95": [
+      0.518986898291864,
+      0.6630456869572016
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}
+
+tail_remaining_36: 8 independent episodes
+{
+  "adapter200_vs_initial": {
+    "ratios": {
+      "position_cm": 0.9989198623821443,
+      "rotation_deg": 0.9902748272629772,
+      "gripper_mae": 1.0058168001550685
+    },
+    "normalized_excess": -0.0016628367332699886,
+    "bootstrap_95": [
+      -0.01190972084786392,
+      0.008006327377907416
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "goal_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.0092253184882747,
+      "rotation_deg": 0.9953910838675324,
+      "gripper_mae": 1.0265150990709144
+    },
+    "normalized_excess": 0.010377167142240518,
+    "bootstrap_95": [
+      0.0025664115709603304,
+      0.018146709346126014
+    ],
+    "nonregression_passed": true,
+    "improvement_supported": false
+  },
+  "local_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.227448203087408,
+      "rotation_deg": 1.137728195013133,
+      "gripper_mae": 1.2847067275773114
+    },
+    "normalized_excess": 0.21662770855928415,
+    "bootstrap_95": [
+      0.18461602931913693,
+      0.24451627551425492
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  },
+  "roles_off_vs_adapter200": {
+    "ratios": {
+      "position_cm": 1.237283764347456,
+      "rotation_deg": 1.1407181955796304,
+      "gripper_mae": 1.2812130262884687
+    },
+    "normalized_excess": 0.21973832873851828,
+    "bootstrap_95": [
+      0.19042268094081252,
+      0.24651382833031138
+    ],
+    "nonregression_passed": false,
+    "improvement_supported": false
+  }
+}

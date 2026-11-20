@@ -1,0 +1,48 @@
+{
+  "status": "eligible_for_bounded_student_pilot",
+  "primary_candidate": "fixed_queries",
+  "teacher_checkpoint": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round6/runs/control/step_000200/adapter.pt",
+  "source_checkpoint": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round4/runs/future_aux/step_000200/adapter.pt",
+  "initializers": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round7/audit/initializers.pt",
+  "student_implementation": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round7/model.py",
+  "student_inputs": [
+    "current_main",
+    "current_wrist",
+    "instruction"
+  ],
+  "role_valid": "always_true",
+  "relevance_gate_scale": 0.0,
+  "original_LaWM_and_queries_retained": true,
+  "stage_II_3000_resumed": false,
+  "new_student_training_started": true,
+  "student_pilot_status": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round7/query_pilot/status.json",
+  "online_evaluation_paused": true,
+  "offline_only": true,
+  "fresh_screen": {
+    "normalized_excess_vs_teacher": -0.039242758182381134,
+    "bootstrap_95": [
+      -0.07940999528543681,
+      -0.00804963632612012
+    ],
+    "ratio_to_teacher": {
+      "position_cm": 0.94549725349305,
+      "rotation_deg": 0.9993212358742256,
+      "gripper_mae": 0.891460285919995
+    },
+    "ratio_to_base": {
+      "position_cm": 0.7788920155543854,
+      "rotation_deg": 0.907175601068094,
+      "gripper_mae": 0.5931029893074483
+    },
+    "exploratory_screen_passed": true
+  },
+  "requires_terminal_stress_test_before_long_training": true,
+  "student_pilot_completed": true,
+  "student_pilot_completed_steps": 200,
+  "postpilot_confirmation": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round7/postpilot_eval/results.json",
+  "terminal_stress_test_completed": true,
+  "postpilot_fresh_screen_passed": true,
+  "postpilot_tail_screen_passed": true,
+  "student_training_incremental_benefit_demonstrated": false,
+  "latest_decision": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round7/POSTPILOT_DECISION.md"
+}

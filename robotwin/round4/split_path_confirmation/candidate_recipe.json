@@ -1,0 +1,18 @@
+{
+  "status": "offline_action_preservation_confirmed_teacher_future_benefit_not_yet_confirmed",
+  "checkpoint": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round4/runs/future_aux/step_000200/adapter.pt",
+  "checkpoint_format": "robotwin_future_aux36_adapter_v1",
+  "baseline_config": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/configs/stage_I.json",
+  "prediction_steps": 36,
+  "tail_padding": "repeat_last_absolute_action_keep_36_tokens",
+  "plan_gate_multiplier": 0,
+  "role_gate_multiplier": 3,
+  "implementation": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round4/audit_split_paths.py",
+  "velocity_equation": "v_base + 3*tanh(saved_residual_gate)*(v_plan_role-v_plan_off)",
+  "preserves_plan_tokens_inside_role_computation": true,
+  "original_LaWM_and_queries_restored": true,
+  "no_weight_updates": true,
+  "student_training_authorized_to_restart": false,
+  "online_evaluation_paused": true,
+  "independent_confirmation": "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round4/split_path_confirmation/results.json"
+}

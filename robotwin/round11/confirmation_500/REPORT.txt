@@ -1,0 +1,118 @@
+# Round11 paired confirmation and gate ablation
+
+Primary endpoint: fresh query_only500 vs initial; lower errors are better.
+Offline errors do not establish closed-loop success.
+
+## fresh: 32 episodes / 64 noise pairs
+
+|Variant|Position cm|Rotation deg|Gripper MAE|
+|---|---:|---:|---:|
+|initial|0.270405|0.555373|0.0016441|
+|query_only|0.270057|0.558499|0.0016312|
+|query_gate|0.270399|0.556764|0.0016351|
+|gate_off|0.269920|0.558208|0.0016350|
+
+query_gate_vs_query_only: normalized excess 95%CI [-0.002940212917466156, 0.004669183525696597]; ratios {'position_cm': 1.0012648549023693, 'rotation_deg': 0.9968934121470733, 'gripper_mae': 1.002374124664971}; improvement supported False.
+
+query_gate_vs_gate_off: normalized excess 95%CI [-0.003514665017404975, 0.0032618521234954005]; ratios {'position_cm': 1.0017750629015465, 'rotation_deg': 0.9974135388594549, 'gripper_mae': 1.000056165591776}; improvement supported False.
+
+query_gate_vs_initial: normalized excess 95%CI [-0.0039836765934035635, 0.0019984498769958195]; ratios {'position_cm': 0.999978321174433, 'rotation_deg': 1.0025050756804583, 'gripper_mae': 0.9945594911688316}; improvement supported False.
+
+query_only_vs_initial: normalized excess 95%CI [-0.007227588301444405, 0.00372219148382172]; ratios {'position_cm': 0.9987150914948856, 'rotation_deg': 1.0056291509854587, 'gripper_mae': 0.9922038754753857}; improvement supported False.
+
+Same-checkpoint gate output drift MSE: 1.108930496762639e-06.
+
+## tail: 8 episodes / 64 noise pairs
+
+|Variant|Position cm|Rotation deg|Gripper MAE|
+|---|---:|---:|---:|
+|initial|0.228766|0.468159|0.0014972|
+|query_only|0.232708|0.470349|0.0014909|
+|query_gate|0.231577|0.467407|0.0014818|
+|gate_off|0.231660|0.469569|0.0014900|
+
+query_gate_vs_query_only: normalized excess 95%CI [-0.015024647501147443, 0.0035499781726841583]; ratios {'position_cm': 0.9951430139812641, 'rotation_deg': 0.9937460769159722, 'gripper_mae': 0.9939008452310852}; improvement supported False.
+
+query_gate_vs_gate_off: normalized excess 95%CI [-0.014373877595458351, 0.006815232868633199]; ratios {'position_cm': 0.9996441321611461, 'rotation_deg': 0.9953968662720085, 'gripper_mae': 0.99448460586559}; improvement supported False.
+
+query_gate_vs_initial: normalized excess 95%CI [-0.013304118016413029, 0.01205419502158545]; ratios {'position_cm': 1.0122902650061394, 'rotation_deg': 0.9983951243095064, 'gripper_mae': 0.9897442251850012}; improvement supported False.
+
+query_only_vs_initial: normalized excess 95%CI [-0.0006375262642988799, 0.01281516984779664]; ratios {'position_cm': 1.0172309414666685, 'rotation_deg': 1.0046783051541317, 'gripper_mae': 0.9958178725110978}; improvement supported False.
+
+Same-checkpoint gate output drift MSE: 1.0624530846214952e-06.
+
+## tail_remaining_1: 8 episodes / 16 noise pairs
+
+|Variant|Position cm|Rotation deg|Gripper MAE|
+|---|---:|---:|---:|
+|initial|0.159667|0.403076|0.0002323|
+|query_only|0.174973|0.411929|0.0001408|
+|query_gate|0.169644|0.397228|0.0001282|
+|gate_off|0.168625|0.393248|0.0001587|
+
+query_gate_vs_query_only: normalized excess 95%CI [-0.215713952496112, 0.08835160781889825]; ratios {'position_cm': 0.9695472939752657, 'rotation_deg': 0.9643114466477419, 'gripper_mae': 0.9106892446090753}; improvement supported False.
+
+query_gate_vs_gate_off: normalized excess 95%CI [-0.23063705875388227, 0.07281717059027443]; ratios {'position_cm': 1.0060461467017812, 'rotation_deg': 1.0101203537415075, 'gripper_mae': 0.807855701074966}; improvement supported False.
+
+query_gate_vs_initial: normalized excess 95%CI [-0.341610735458188, 0.02997438375215841]; ratios {'position_cm': 1.062488696900324, 'rotation_deg': 0.9854924526283653, 'gripper_mae': 0.5519793445751445}; improvement supported False.
+
+query_only_vs_initial: normalized excess 95%CI [-0.20328562382990856, 0.0014605995927568032]; ratios {'position_cm': 1.095860618148896, 'rotation_deg': 1.0219649015411518, 'gripper_mae': 0.6061116323077786}; improvement supported False.
+
+Same-checkpoint gate output drift MSE: 1.1090767273458368e-06.
+
+## tail_remaining_8: 8 episodes / 16 noise pairs
+
+|Variant|Position cm|Rotation deg|Gripper MAE|
+|---|---:|---:|---:|
+|initial|0.180375|0.443111|0.0012839|
+|query_only|0.181844|0.442690|0.0013593|
+|query_gate|0.181123|0.440175|0.0013197|
+|gate_off|0.180873|0.447787|0.0013290|
+
+query_gate_vs_query_only: normalized excess 95%CI [-0.0294780885040184, 0.004087897482430566]; ratios {'position_cm': 0.9960351514970127, 'rotation_deg': 0.9943190648444978, 'gripper_mae': 0.9709006590572583}; improvement supported False.
+
+query_gate_vs_gate_off: normalized excess 95%CI [-0.0244111321167622, 0.009456113359848176]; ratios {'position_cm': 1.0013869338128734, 'rotation_deg': 0.9829998072536543, 'gripper_mae': 0.9929970023442015}; improvement supported False.
+
+query_gate_vs_initial: normalized excess 95%CI [-0.006809907291965252, 0.025351668304346712]; ratios {'position_cm': 1.0041516317535188, 'rotation_deg': 0.9933748130374347, 'gripper_mae': 1.027930556714193}; improvement supported False.
+
+query_only_vs_initial: normalized excess 95%CI [0.0018389100578591595, 0.04307105703001242]; ratios {'position_cm': 1.0081487889702558, 'rotation_deg': 0.9990503533116798, 'gripper_mae': 1.0587391687552365}; improvement supported False.
+
+Same-checkpoint gate output drift MSE: 1.0629087832114692e-06.
+
+## tail_remaining_24: 8 episodes / 16 noise pairs
+
+|Variant|Position cm|Rotation deg|Gripper MAE|
+|---|---:|---:|---:|
+|initial|0.299232|0.451819|0.0005313|
+|query_only|0.298795|0.453612|0.0005334|
+|query_gate|0.299998|0.460675|0.0005278|
+|gate_off|0.300902|0.462724|0.0005288|
+
+query_gate_vs_query_only: normalized excess 95%CI [-0.01566333292759945, 0.018560247928998914]; ratios {'position_cm': 1.0040282118022386, 'rotation_deg': 1.0155701276826858, 'gripper_mae': 0.9895699828128228}; improvement supported False.
+
+query_gate_vs_gate_off: normalized excess 95%CI [-0.02133478235240042, 0.019925782850964534]; ratios {'position_cm': 0.9969951843269796, 'rotation_deg': 0.9955715699576265, 'gripper_mae': 0.9982526137032748}; improvement supported False.
+
+query_gate_vs_initial: normalized excess 95%CI [-0.014183074549827965, 0.02542623882640618]; ratios {'position_cm': 1.002560936500145, 'rotation_deg': 1.0195994110366886, 'gripper_mae': 0.9933975205993264}; improvement supported False.
+
+query_only_vs_initial: normalized excess 95%CI [-0.015903989260361635, 0.02390991949588908]; ratios {'position_cm': 0.998538611480389, 'rotation_deg': 1.0039675087363948, 'gripper_mae': 1.0038678798397096}; improvement supported False.
+
+Same-checkpoint gate output drift MSE: 1.0183940801766767e-06.
+
+## tail_remaining_36: 8 episodes / 16 noise pairs
+
+|Variant|Position cm|Rotation deg|Gripper MAE|
+|---|---:|---:|---:|
+|initial|0.275789|0.574629|0.0039412|
+|query_only|0.275218|0.573164|0.0039301|
+|query_gate|0.275543|0.571551|0.0039515|
+|gate_off|0.276239|0.574515|0.0039436|
+
+query_gate_vs_query_only: normalized excess 95%CI [-0.0041330694715739896, 0.006237217862469749]; ratios {'position_cm': 1.001179959953408, 'rotation_deg': 0.9971860762264008, 'gripper_mae': 1.0054245163421829}; improvement supported False.
+
+query_gate_vs_gate_off: normalized excess 95%CI [-0.005755025708019108, 0.002965733799717443]; ratios {'position_cm': 0.9974804627721976, 'rotation_deg': 0.9948406068982388, 'gripper_mae': 1.0019920496775276}; improvement supported False.
+
+query_gate_vs_initial: normalized excess 95%CI [-0.00502733248396054, 0.002578598150340884]; ratios {'position_cm': 0.9991073301528345, 'rotation_deg': 0.9946445355328001, 'gripper_mae': 1.0026145595527292}; improvement supported False.
+
+query_only_vs_initial: normalized excess 95%CI [-0.00707569786604342, 0.001961301809265282]; ratios {'position_cm': 0.9979298129372568, 'rotation_deg': 0.9974512874234882, 'gripper_mae': 0.997205203629133}; improvement supported False.
+
+Same-checkpoint gate output drift MSE: 1.0594327477519982e-06.

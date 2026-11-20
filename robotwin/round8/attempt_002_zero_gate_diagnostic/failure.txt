@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/robotwin/round8/train.py", line 117, in main
+    assert all(torch.equal(x,y) for x,y in zip(c0,cg)),diag
+AssertionError: {'condition_max_abs': [0.0, 0.0, 0.0, 0.140625, 0.125, 0.0], 'repeat_control_max_abs': [0.0, 0.0, 0.0, 0.140625, 0.125, 0.0], 'all_initial_parameters_equal': True, 'no_cache_max_abs': [0.0, 0.0, 0.0, 0.1484375, 0.125, 0.0]}

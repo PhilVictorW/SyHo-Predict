@@ -1,0 +1,29 @@
+{
+  "architecture": "goal_local_v1",
+  "baseline_checkpoint": "/mnt/hdd/wangchaoyang/CKPT/LaWAM/results/Checkpoints/libero/lawam_libero_sft_release/final_model/pytorch_model.pt",
+  "qwen_path": "/mnt/hdd/wangchaoyang/CKPT/LaWAM/results/Checkpoints/qwen3_weights",
+  "dino_path": "/mnt/hdd/wangchaoyang/CKPT/LaWAM/weights/dinov3-vitb16-pretrain-lvd1689m",
+  "statistics_path": "/mnt/hdd/wangchaoyang/CKPT/LaWAM/results/Checkpoints/libero/lawam_libero_sft_release/dataset_statistics.json",
+  "dataset_root": "/mnt/hdd/wangchaoyang/CKPT/LaWAM/dataset/libero_merged_no_noops_20hz",
+  "llm_layers": 16, "slots": 8, "plan_tokens": 4,
+  "gate_start_layer": 9, "distill_layers": [4,8,12,16],
+  "goal_horizons": [3,5,7,9,11], "horizon": 8,
+  "future_encoder": "framewise_qwen_temporal_resampler",
+  "role_scale": 0.01, "gate_scale": 0.01,
+  "lambda_local": 1.0, "lambda_goal": 1.0, "gram_alpha": 1.0,
+  "repeated_diffusion_steps": 2, "seed": 2026, "val_ratio": 0.05,
+  "learning_rate": 0.00001, "weight_decay": 0.00000001,
+  "gradient_clip": 1.0, "warmup_steps": 100, "checkpoint_blocks": true,
+  "flow": {
+    "action_dim": 32, "state_dim": 32, "use_state": false,
+    "vlm_dim": 2048, "vision_dim": 768, "hidden_dim": 1024,
+    "num_layers": 16, "attention_heads": 16, "num_embodiments": 32,
+    "num_vision_tokens": 256, "num_target_vision_tokens": -1,
+    "interleave_self_attention": true, "use_alternate_vldit": true,
+    "attend_text_every_n_blocks": 2, "cfg_drop_prob": 0.0,
+    "cfg_guidance_scale": 1.0, "num_inference_steps": 10,
+    "num_timestep_buckets": 1000, "horizon_sec": 0.4,
+    "noise_beta_alpha": 1.5, "noise_beta_beta": 1.0, "noise_s": 0.999,
+    "token_independent_noise": false, "use_action_positional_embeddings": true
+  }
+}
