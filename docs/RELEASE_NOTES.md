@@ -11,6 +11,7 @@ This repository was prepared as an independent copy on 2026-11-20. Existing proj
 - Changed one nested f-string quotation in robotwin/round11/tail_dashboard.py for Python 3.10 syntax compatibility.
 - Replaced the empty upstream ACT SIM_TASK_CONFIGS.json placeholder with an empty JSON object; task-specific values still need to be supplied when using that alternative policy.
 - Removed notebook execution outputs in the copied notebooks and resolved the selected RoboTwin source symlinks into ordinary files.
+- Included the bundled RoboTwin C++/CUDA kernels, build manifests and Dockerfiles; native extensions were not compiled during publication.
 - Added ignore rules for generated data, weights, caches and machine-local configuration.
 
 These preparation changes do not modify model tensors, training objectives or benchmark results. Original upstream attribution and component license notices are retained.

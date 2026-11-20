@@ -1,0 +1,41 @@
+--- full_train.before.py
++++ full_train.py
+@@ -9,6 +9,7 @@
+ 
+ import argparse
+ import concurrent.futures
++from contextlib import ExitStack
+ import gc
+ import json
+ import os
+@@ -118,10 +119,12 @@
+     args = parser.parse_args()
+     gpus = [int(x) for x in args.gpus.split(",") if x.strip()]
+     ports = [int(x) for x in args.ports.split(",") if x.strip()]
+-    if gpus != DEFAULT_GPUS:
+-        raise ValueError(f"GPU layout must be GPU0x1,GPU2x2,GPU5x2,GPU7x2: got {gpus}")
++    if not gpus or any(gpu < 0 for gpu in gpus):
++        raise ValueError("gpus must contain at least one nonnegative GPU index")
+     if len(ports) != len(gpus):
+         raise ValueError("gpus and ports must have equal length")
++    if len(set(ports)) != len(ports) or any(not 1 <= port <= 65535 for port in ports):
++        raise ValueError("each worker must have a distinct valid TCP port")
+     if args.groups_per_update != GROUPS_PER_UPDATE:
+         raise ValueError("full classic LIBERO run uses 32 groups per update")
+     tasks = ensure_manifest()
+@@ -208,8 +211,13 @@
+                                      TRAJECTORIES_PER_GROUP, current_actor, server[1],
+                                      gpus[worker_idx], initial_state_idx=int(row["initial_state_idx"]))
+                 return pos, group_id, worker_idx, rows
+-            with concurrent.futures.ThreadPoolExecutor(max_workers=len(servers)) as pool:
+-                jobs = [pool.submit(one_group, (pos, group_id)) for pos, group_id in enumerate(batch_ids)]
++            # Keep one serial collection queue per model worker. A fast group
++            # must not start a second collector on another worker that is busy.
++            with ExitStack() as stack:
++                pools = [stack.enter_context(concurrent.futures.ThreadPoolExecutor(max_workers=1))
++                         for _ in servers]
++                jobs = [pools[pos % len(servers)].submit(one_group, (pos, group_id))
++                        for pos, group_id in enumerate(batch_ids)]
+                 for job in concurrent.futures.as_completed(jobs):
+                     pos, group_id, worker_idx, rows = job.result()
+                     groups[pos] = rows

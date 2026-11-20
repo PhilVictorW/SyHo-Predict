@@ -1,0 +1,121 @@
+--- student_eval_common.py.before
++++ runtime/student_eval_common.py
+@@ -13,7 +13,13 @@
+ CATEGORIES=['Camera','Robot','Language','Light','Background','Noise','Layout']
+ GPUS=[6,6,7,7]
+ PORTS=[24880,24881,24882,24883]
++ACTION_PROTOCOL=dict(id='libero_plus_open_to_legacy_close_v1',source_gripper='one_is_open',
++    client_gripper='one_is_closed',simulator_gripper='minus_one_open_plus_one_closed',
++    conversion='client_gripper = 1 - predicted_gripper',motion_dimensions_unchanged=True)
+ _COLLECT_CACHE={}
++
++def eval_folder(step):
++    return ROOT/f'step_{step:06d}_gripper_v1'
+ 
+ def atomic(path,value):
+     path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)
+@@ -22,6 +28,8 @@
+ def collect(folder):
+     import csv
+     folder=Path(folder); protocol=json.loads((folder/'protocol.json').read_text())
++    if protocol.get('action_protocol')!=ACTION_PROTOCOL:
++        raise ValueError('Refuse to mix evaluation results with a different gripper protocol')
+     wanted={(r['suite'],r['task_id']):r for r in protocol['tasks']}
+     # Completed episode files are immutable; avoid rereading all 10030 every refresh.
+     cache=_COLLECT_CACHE.setdefault(str(folder),{})
+@@ -31,6 +39,8 @@
+         r=cache[f.name];key=(r['suite'],r['task_id'])
+         if key not in wanted or r.get('error'):raise ValueError(f'Unexpected result {f}')
+         assert r['episode_idx']==0 and r['checkpoint']==protocol['checkpoint']
++        if r.get('action_protocol_id')!=ACTION_PROTOCOL['id']:
++            raise ValueError(f'Unverified gripper semantics in {f}')
+         rows[key]=r
+     cells={s:{c:dict(episodes=0,successes=0,expected=sum(t['suite']==s and t['category']==c for t in wanted.values())) for c in CATEGORIES} for s in SUITES}
+     for key,r in rows.items():
+@@ -44,7 +54,7 @@
+     for r in list(suites.values())+list(categories.values()):r['success_rate']=r['successes']/r['episodes'] if r['episodes'] else None
+     n=len(rows);success=sum(int(r['success']) for r in rows.values())
+     result=dict(step=protocol['step'],smoke=protocol['smoke'],scope=protocol.get('scope','sampled'),checkpoint=protocol['checkpoint'],episodes=n,expected=len(wanted),
+-        successes=success,success_rate=success/n if n else None,complete=n==len(wanted),cells=cells,suites=suites,categories=categories,updated=time.time())
++        successes=success,success_rate=success/n if n else None,complete=n==len(wanted),cells=cells,suites=suites,categories=categories,action_protocol=ACTION_PROTOCOL,updated=time.time())
+     atomic(folder/'results.json',result)
+     with (folder/'matrix.csv').open('w') as f:
+         writer=csv.writer(f);writer.writerow(['suite','category','completed','expected','successes','success_rate'])
+--- student_eval_queue.py.before
++++ runtime/student_eval_queue.py
+@@ -14,6 +14,7 @@
+ from student_eval_common import *
+ sys.path.insert(0,str(WORK.parent))
+ from goal_local.eval_client import rpc
++from student_action_protocol import ensure_checkpoint_protocol
+ 
+ def environment(gpu):
+     env=os.environ.copy();env.update(CUDA_VISIBLE_DEVICES=str(gpu),MUJOCO_EGL_DEVICE_ID=str(gpu),
+@@ -32,13 +33,14 @@
+         except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait()
+ 
+ def evaluate(step,checkpoint):
+-    folder=ROOT/f'step_{step:06d}';folder.mkdir(exist_ok=True)
++    action_protocol=ensure_checkpoint_protocol(checkpoint)
++    folder=eval_folder(step);folder.mkdir(exist_ok=True)
+     manifest=json.loads((ROOT/'full_manifest.json').read_text())
+     tasks=manifest['tasks']
+     assert len(tasks)==10030 and len({(t['suite'],t['task_id']) for t in tasks})==10030
+     protocol=dict(step=step,smoke=False,scope='full_libero_plus',checkpoint=str(checkpoint.resolve()),tasks=tasks,seed=0,episodes_per_task=1,
+         action_chunk=8,flow_steps=10,uses_state=False,uses_future=False,save_videos=False,task_manifest=str(ROOT/'full_manifest.json'),
+-        classification_sha256=manifest['source_sha256'])
++        classification_sha256=manifest['source_sha256'],action_protocol=action_protocol)
+     if (folder/'protocol.json').exists():assert json.loads((folder/'protocol.json').read_text())==protocol
+     else:atomic(folder/'protocol.json',protocol)
+     (folder/'episodes').mkdir(exist_ok=True)
+@@ -107,8 +109,11 @@
+             if 500<=step<=10000 and step%500==0:candidates.append((step,marker.parent))
+         outstanding=[]
+         for step,checkpoint in sorted(candidates):
+-            folder=ROOT/f'step_{step:06d}'
+-            if (folder/'results.json').exists() and json.loads((folder/'results.json').read_text())['complete']:continue
++            folder=eval_folder(step)
++            if (folder/'results.json').exists():
++                previous=json.loads((folder/'results.json').read_text())
++                if previous.get('action_protocol')!=ACTION_PROTOCOL:raise ValueError('Incompatible completed evaluation protocol')
++                if previous['complete']:continue
+             outstanding.append((step,checkpoint))
+         if not outstanding:
+             atomic(ROOT/'status.json',dict(phase='waiting_for_checkpoint',scope='full_libero_plus',expected=10030,updated=time.time(),completed_steps=[s for s,p in candidates],interval=500))
+--- student_rollout.py.before
++++ runtime/student_rollout.py
+@@ -8,7 +8,7 @@
+ import time
+ import traceback
+ 
+-from student_eval_common import SUITES, BENCH, atomic
++from student_eval_common import SUITES, BENCH, ACTION_PROTOCOL, atomic
+ 
+ def main():
+     parser=argparse.ArgumentParser();parser.add_argument('--folder',required=True);parser.add_argument('--worker',type=int,required=True);parser.add_argument('--url',required=True)
+@@ -20,11 +20,11 @@
+     import numpy as np
+     np.random.seed(0)
+     from examples.LIBERO.eval_files import libero_eval_core as core
+-    from goal_local.eval_client import StudentClient
++    from student_action_protocol import PlusStudentClient
+     core._configure_logging()
+     adapter=core.get_benchmark_adapter('libero_plus')
+     benchmark=core._get_benchmark_dict();suites={}
+-    client=StudentClient(protocol['checkpoint'],args.url)
++    client=PlusStudentClient(protocol['checkpoint'],args.url,action_protocol=protocol['action_protocol'])
+     db=sqlite3.connect(folder/'queue.sqlite',timeout=60,isolation_level=None)
+     status_path=folder/f'worker{args.worker}.json'
+     def status(**extra):atomic(status_path,dict(worker=args.worker,pid=os.getpid(),updated=time.time(),**extra))
+@@ -54,7 +54,10 @@
+                 result=core._run_single_episode(args=eval_args,adapter=adapter,task=actual,task_id=tid,episode_idx=0,
+                     init_state=initial[core._task_init_state_index(initial,0)],client_model=client,run_output_dir=folder,env_seed=0)
+                 data=dataclasses.asdict(result)
+-                data.update(suite=suite_name,category=task['category'],checkpoint=protocol['checkpoint'],worker=args.worker,completed_at=time.time())
++                if result.error:
++                    raise RuntimeError(result.error)
++                data.update(suite=suite_name,category=task['category'],checkpoint=protocol['checkpoint'],worker=args.worker,
++                    action_protocol_id=ACTION_PROTOCOL['id'],completed_at=time.time())
+                 atomic(folder/'episodes'/f'{suite_name}_{tid:05d}.json',data)
+                 db.execute("UPDATE tasks SET state='done' WHERE id=?",(job,))
+                 print(json.dumps(dict(event='episode',suite=suite_name,task_id=tid,success=result.success)),flush=True)

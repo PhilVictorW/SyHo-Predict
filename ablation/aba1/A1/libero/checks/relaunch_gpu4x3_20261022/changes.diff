@@ -1,0 +1,310 @@
+--- before/run_plan.json
++++ after/run_plan.json
+@@ -2,17 +2,16 @@
+   "protocol": "a1_local16_libero_teacher1000_student2000_v1",
+   "model_config": "config.json",
+   "model_python": "/home/wangchaoyang/envs/LaWAM/bin/python",
+-  "run_name": "local16_teacher1000_student2000_gpu5x4_20261021",
+-  "physical_gpu": 5,
+-  "world_size": 4,
++  "run_name": "local16_teacher1000_student2000_gpu4x3_20261022",
++  "physical_gpu": 4,
++  "world_size": 3,
+   "backend": "gloo",
+   "global_batch": 32,
+   "micro_batch": 1,
+   "rank_anchors_per_update": [
+-    8,
+-    8,
+-    8,
+-    8
++    11,
++    11,
++    10
+   ],
+   "loader_workers_per_rank": 1,
+   "cpu_threads_per_rank": 2,
+@@ -43,7 +42,6 @@
+   "minimum_disk_free_gib": 24,
+   "resource_thresholds_enforced": false,
+   "oom_fallback_world_sizes": [
+-    4,
+     3,
+     2,
+     1
+--- before/a1_local/config.py
++++ after/a1_local/config.py
+@@ -16,8 +16,7 @@
+ def load_plan(path=PLAN):
+     plan = json.loads(Path(path).read_text())
+     expected = {
+-        "physical_gpu": 5, "world_size": 4, "backend": "gloo", "global_batch": 32,
+-        "micro_batch": 1, "rank_anchors_per_update": [8, 8, 8, 8],
++        "backend": "gloo", "global_batch": 32, "micro_batch": 1,
+         "save_initial_weights": False, "save_best_weights": False,
+         "automatic_stage_II": True, "automatic_evaluation": False,
+         "checkpoint_contents": "model_processor_statistics_and_provenance_only",
+@@ -25,6 +24,13 @@
+     for key, value in expected.items():
+         if plan.get(key) != value:
+             raise ValueError(f"Unexpected A1 execution contract: {key}")
++    gpu, world = plan.get('physical_gpu'), plan.get('world_size')
++    if not isinstance(gpu, int) or gpu < 0 or not isinstance(world, int) or not 1 <= world <= 4:
++        raise ValueError('Expected one physical GPU and one to four training ranks')
++    if plan.get('rank_anchors_per_update') != [len(range(r, 32, world)) for r in range(world)]:
++        raise ValueError('Rank shares must partition the effective batch of 32')
++    if plan.get('oom_fallback_world_sizes') != list(range(world, 0, -1)):
++        raise ValueError('OOM fallback must start at the requested rank count')
+     for stage, steps, interval, keep in [("I", 1000, 1000, 1), ("II", 2000, 500, 2)]:
+         spec = plan[f"stage_{stage}"]
+         if (spec["steps"], spec["schedule_steps"], spec["save_every"], spec["keep"]) != (steps, steps, interval, keep):
+@@ -74,7 +80,7 @@
+     disk = shutil.disk_usage(WORK).free / 1024**3
+     blockers = []
+     for label, available, minimum in [
+-        ("GPU 5 free GiB", gpu, plan["minimum_gpu_free_gib"]),
++        (f"GPU {plan['physical_gpu']} free GiB", gpu, plan["minimum_gpu_free_gib"]),
+         ("host available GiB", host, plan["minimum_host_available_gib"]),
+         ("workspace free GiB", disk, plan["minimum_disk_free_gib"]),
+     ]:
+--- before/a1_local/launcher.py
++++ after/a1_local/launcher.py
+@@ -1,4 +1,4 @@
+-"""Start on GPU 5 immediately; reduce ranks after an actual CUDA OOM."""
++"""Start on the configured GPU immediately; reduce ranks after an actual CUDA OOM."""
+ import argparse
+ import fcntl
+ import json
+@@ -9,7 +9,8 @@
+ from .config import WORK, ROOT, load_plan, run_path, resource_report, atomic_json, source_manifest
+ 
+ 
+-def commands(plan, output, world=4):
++def commands(plan, output, world=None):
++    world = plan['world_size'] if world is None else world
+     return {stage: [plan['model_python'], '-B', '-m', 'torch.distributed.run', '--standalone',
+         '--nnodes=1', f'--nproc-per-node={world}', '--max-restarts=0', '--log-dir', str(output/'logs'/('stage_'+stage+f'_ranks{world}')),
+         '--tee', '3', '-m', 'a1_local.training', '--stage', stage, '--experiment-root', str(output)] for stage in ['I','II']}
+@@ -31,7 +32,7 @@
+     output = run_path(plan, args.output)
+     report = dict(plan=plan, config=cfg, output=str(output), resources=resource_report(plan),
+         commands=commands(plan,output), starts_training=args.execute, resource_thresholds_enforced=False,
+-        oom_fallback=[4,3,2,1])
++        oom_fallback=plan['oom_fallback_world_sizes'])
+     print(json.dumps(report, indent=2), flush=True)
+     if not args.execute:
+         return
+@@ -43,17 +44,18 @@
+     if (output/'pipeline.json').exists() or any((output/('stage_'+s)).exists() for s in ['I','II']):
+         raise FileExistsError('Preserve existing run; weight-only exports do not restore Adam state.')
+     atomic_json(output/'launch.json', report)
++    atomic_json(output/'run_plan.json', plan)
+     atomic_json(output/'source_manifest.json', source_manifest())
+-    env = dict(os.environ, CUDA_VISIBLE_DEVICES='5', CUDA_DEVICE_ORDER='PCI_BUS_ID', A1_PIPELINE_RUN=str(output),
++    env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(plan['physical_gpu']), CUDA_DEVICE_ORDER='PCI_BUS_ID', A1_PIPELINE_RUN=str(output),
+         PYTHONPATH=str(WORK)+os.pathsep+str(ROOT), PYTHONDONTWRITEBYTECODE='1', PYTHONUNBUFFERED='1',
+         TOKENIZERS_PARALLELISM='false', HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1',
+         OMP_NUM_THREADS=str(plan['cpu_threads_per_rank']), MKL_NUM_THREADS=str(plan['cpu_threads_per_rank']),
+         PYTORCH_CUDA_ALLOC_CONF='expandable_segments:True')
+-    stage, world = 'I', 4
++    stage, world = 'I', plan['world_size']
+     try:
+         for stage in ['I','II']:
+             while True:
+-                state=dict(phase='training',stage=stage,world_size=world,run=str(output),time=time.time())
++                state=dict(phase='training',stage=stage,world_size=world,physical_gpu=plan['physical_gpu'],run=str(output),time=time.time())
+                 atomic_json(WORK/'queue_status.json',state)
+                 atomic_json(output/'pipeline.json',state)
+                 result=subprocess.run(commands(plan,output,world)[stage],cwd=WORK,env=env)
+@@ -72,11 +74,11 @@
+             state=json.loads((output/('stage_'+stage)/'status.json').read_text())
+             if state['phase'] != 'completed' or final['step'] != plan['stage_'+stage]['steps']:
+                 raise RuntimeError('Stage completion contract failed')
+-        state=dict(phase='completed',student_checkpoint=final['path'],world_size=world,automatic_evaluation=False,time=time.time())
++        state=dict(phase='completed',student_checkpoint=final['path'],world_size=world,physical_gpu=plan['physical_gpu'],automatic_evaluation=False,time=time.time())
+         atomic_json(output/'pipeline.json',state)
+         atomic_json(WORK/'queue_status.json',state)
+     except BaseException:
+-        state=dict(phase='failed',stage=stage,world_size=world,error=traceback.format_exc(),time=time.time())
++        state=dict(phase='failed',stage=stage,world_size=world,physical_gpu=plan['physical_gpu'],error=traceback.format_exc(),time=time.time())
+         atomic_json(output/'pipeline.json',state)
+         atomic_json(WORK/'queue_status.json',state)
+         raise
+--- before/a1_local/training.py
++++ after/a1_local/training.py
+@@ -1,4 +1,4 @@
+-"""Four synchronous ranks sharing physical GPU 5; CPU Gloo and rank-zero AdamW."""
++"""Synchronous ranks sharing one configured GPU; CPU Gloo and rank-zero AdamW."""
+ import argparse
+ import copy
+ import gc
+@@ -19,13 +19,13 @@
+     p.add_argument('--stage', choices=['I', 'II'], required=True)
+     p.add_argument('--experiment-root', required=True)
+     args = p.parse_args()
+-    plan, cfg = load_plan()
++    plan, cfg = load_plan(Path(args.experiment_root) / 'run_plan.json')
+     root = run_path(plan, args.experiment_root)
+     if os.environ.get('A1_PIPELINE_RUN') != str(root):
+         raise RuntimeError('Use launch.py --execute to run the complete pipeline')
+     world = int(os.environ.get('WORLD_SIZE', '0'))
+-    if os.environ.get('CUDA_VISIBLE_DEVICES') != '5' or not 1 <= world <= 4:
+-        raise RuntimeError('One to four ranks on physical GPU 5 are required')
++    if os.environ.get('CUDA_VISIBLE_DEVICES') != str(plan['physical_gpu']) or not 1 <= world <= plan['world_size']:
++        raise RuntimeError('Ranks and CUDA device must match the saved run plan')
+     plan = dict(plan, world_size=world, rank_anchors_per_update=[len(range(r,32,world)) for r in range(world)])
+     import torch
+     import torch.distributed as dist
+@@ -40,7 +40,9 @@
+     except BaseException:
+         atomic_json(output / f'failure_rank_{rank}.json', dict(error=traceback.format_exc(), time=time.time()))
+         if rank == 0:
+-            atomic_json(output / 'status.json', dict(phase='failed', stage=args.stage, error=traceback.format_exc()))
++            state = json.loads((output / 'status.json').read_text()) if (output / 'status.json').exists() else {}
++            atomic_json(output / 'status.json', dict(state, phase='failed', stage=args.stage,
++                error=traceback.format_exc(), updated_at=time.time()))
+         raise
+     finally:
+         dist.destroy_process_group()
+@@ -85,7 +87,7 @@
+     assert policy.kl == 16 and policy.kg == 0
+     assert not hasattr(policy, 'gate') and not hasattr(policy, 'q_goal')
+     model.to(device)
+-    atomic_json(output / f'worker_{rank}.json', dict(rank=rank, pid=os.getpid(), physical_gpu=5,
++    atomic_json(output / f'worker_{rank}.json', dict(rank=rank, pid=os.getpid(), physical_gpu=plan['physical_gpu'],
+                 logical_gpu=0, stage=stage, phase='model_loaded', cuda_allocated_gib=torch.cuda.memory_allocated()/1024**3))
+     gc.collect(); torch.cuda.empty_cache()
+     dist.barrier()
+@@ -100,7 +102,7 @@
+         atomic_json(output / 'source_manifest.json', source_manifest())
+         atomic_json(output / 'parameter_audit.json', dict(trainable=sum(p.numel() for p in parameters),
+             frozen=sum(p.numel() for p, _ in frozen.values()), local_slots=16, goal_slots=0, interaction=False,
+-            distill_layers=cfg['distill_layers'] if stage == 'II' else [], physical_gpu=5, ranks=plan['world_size']))
++            distill_layers=cfg['distill_layers'] if stage == 'II' else [], physical_gpu=plan['physical_gpu'], ranks=plan['world_size']))
+         atomic_json(output / ('teacher_source.json' if stage == 'II' else 'initialization.json'),
+                     teacher_source if stage == 'II' else policy.initialization_report)
+     data = FutureDataset(cfg['dataset_root'], policy.statistics, split='train', seed=cfg['split_seed'],
+--- before/watch_full_eval.py
++++ after/watch_full_eval.py
+@@ -125,7 +125,8 @@
+     output=WORK/'evaluation'/(run.name+'_full40x50_step2000')
+     watch=WORK/'auto_eval'/run.name
+     checkpoint=run/'stage_II/checkpoints/step_002000'
+-    manifest=dict(run=str(run),checkpoint=str(checkpoint),output=str(output),physical_gpu=5,
++    gpu=str(plan['physical_gpu'])
++    manifest=dict(run=str(run),checkpoint=str(checkpoint),output=str(output),physical_gpu=plan['physical_gpu'],
+         protocol='full',tasks=40,episodes_per_task=50,expected_episodes=2000,poll_seconds=5,
+         max_evaluation_attempts=3,training_files_modified=False,command=command(checkpoint,output))
+     if args.once or not args.execute:
+@@ -162,7 +163,7 @@
+         atomic_json(watch/'verified_checkpoint.json',dict(path=str(checkpoint),step=2000,sha256=checksum))
+         if complete(output,checksum):
+             update('completed',**progress(output));return
+-        env=dict(os.environ,CUDA_VISIBLE_DEVICES='5',CUDA_DEVICE_ORDER='PCI_BUS_ID',MUJOCO_EGL_DEVICE_ID='5',
++        env=dict(os.environ,CUDA_VISIBLE_DEVICES=gpu,CUDA_DEVICE_ORDER='PCI_BUS_ID',MUJOCO_EGL_DEVICE_ID=gpu,
+             MUJOCO_GL='egl',PYOPENGL_PLATFORM='egl',PYTHONDONTWRITEBYTECODE='1',PYTHONUNBUFFERED='1',
+             TOKENIZERS_PARALLELISM='false',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',
+             OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',PYTORCH_CUDA_ALLOC_CONF='expandable_segments:True')
+--- before/monitor.py
++++ after/monitor.py
+@@ -60,13 +60,14 @@
+ 
+ def render(root):
+     now = time.time()
+-    plan = read(WORK/'run_plan.json')
++    plan = read(root/'run_plan.json') or read(root/'launch.json').get('plan') or read(WORK/'run_plan.json')
+     pipeline = read(root/'pipeline.json')
+     active = pipeline.get('stage','II' if pipeline.get('phase') == 'completed' else 'I')
+     world = pipeline.get('world_size',plan.get('world_size',4))
++    physical_gpu = pipeline.get('physical_gpu',plan['physical_gpu'])
+     lines = ['A1 LIBERO  |  Local-only 16 tokens',
+              datetime.now(ZoneInfo('Asia/Singapore')).strftime('%Y-%m-%d %H:%M:%S UTC+8') + '  |  每 5 秒刷新',
+-             f"GPU 5  |  当前 {world} 个训练进程  |  有效 batch 32  |  {PHASE.get(pipeline.get('phase'),'初始化/加载中')}", '']
++             f"GPU {physical_gpu}  |  当前 {world} 个训练进程  |  有效 batch 32  |  {PHASE.get(pipeline.get('phase'),'初始化/加载中')}", '']
+     total_done = 0
+     for stage, label, target in [('I','教师 Stage I',1000),('II','学生 Stage II',2000)]:
+         folder = root/('stage_'+stage)
+@@ -113,9 +114,9 @@
+         lines.append(f"  rank {rank}  PID {pid}  {'运行中' if alive else '已退出'}  {micro}{age}")
+     if not found: lines.append('  正在创建进程/加载权重；以训练日志为准')
+     try:
+-        gpu = subprocess.check_output(['nvidia-smi','-i','5','--query-gpu=memory.used,memory.total,utilization.gpu',
++        gpu = subprocess.check_output(['nvidia-smi','-i',str(physical_gpu),'--query-gpu=memory.used,memory.total,utilization.gpu',
+             '--format=csv,noheader,nounits'],text=True,timeout=3).strip().split(',')
+-        lines += ['',f'GPU 5 全卡：显存 {float(gpu[0])/1024:.1f}/{float(gpu[1])/1024:.0f} GiB，利用率 {gpu[2].strip()}%（包含其他任务）']
++        lines += ['',f'GPU {physical_gpu} 全卡：显存 {float(gpu[0])/1024:.1f}/{float(gpu[1])/1024:.0f} GiB，利用率 {gpu[2].strip()}%（包含其他任务）']
+     except (OSError,ValueError,subprocess.SubprocessError):
+         lines += ['', 'GPU 状态暂不可读；训练进度仍正常刷新']
+     if pipeline.get('phase') == 'failed':
+--- before/a1_local/test_runtime.py
++++ after/a1_local/test_runtime.py
+@@ -12,9 +12,9 @@
+ from ablation.aba1.plus_common.distributed import DistributedMaster
+ 
+ 
+-def distributed_worker(rank, rendezvous):
++def distributed_worker(rank, rendezvous, world=4):
+     torch.set_num_threads(1)
+-    dist.init_process_group('gloo', init_method='file://' + rendezvous, rank=rank, world_size=4)
++    dist.init_process_group('gloo', init_method='file://' + rendezvous, rank=rank, world_size=world)
+     try:
+         value = torch.nn.Parameter(torch.tensor([.2, -.1]))
+         opt = DistributedMaster([value], .01, .0001, bucket_elements=1)
+@@ -25,8 +25,8 @@
+         y = torch.linspace(-.3, .4, 32)
+         for step in range(3):
+             opt.zero_grad(); ref_opt.zero_grad()
+-            for i in range(rank,32,4):
+-                ((value@x[i]-y[i]).square()*backward_weight()).backward()
++            for i in range(rank,32,world):
++                ((value@x[i]-y[i]).square()*backward_weight(world,32)).backward()
+             opt.step(.01, 1.)
+             ((x@reference-y).square().mean()).backward()
+             torch.nn.utils.clip_grad_norm_([reference],1.)
+@@ -64,6 +64,10 @@
+         with tempfile.TemporaryDirectory(dir=WORK/'checks') as folder:
+             mp.spawn(distributed_worker,args=(str(Path(folder)/'gloo'),),nprocs=4,join=True)
+ 
++    def test_three_process_gradient_equivalence(self):
++        with tempfile.TemporaryDirectory(dir=WORK/'checks') as folder:
++            mp.spawn(distributed_worker,args=(str(Path(folder)/'gloo'),3),nprocs=3,join=True)
++
+ 
+ if __name__ == '__main__':
+     (WORK/'checks').mkdir(exist_ok=True)
+--- before/README.md
++++ after/README.md
+@@ -4,18 +4,20 @@
+ 
+ - Stage I：从原始 LaWAM LIBERO SFT 权重构建 Local-only 后验教师；未来仅采样同一 episode 的 t+8 主视角/腕部视角，现有冻结视觉编码器与 Resampler 输出 16 个 Local token。仅 action flow matching loss；保留现有 DINO、Plan 及 DiT 结构，没有 Goal 分支或两组 query 的交互。尾部缺失未来时使用有效性掩码，不越界、不筛掉整个样本。
+ - Stage II：只继承本次 Stage I 第 1000 步教师的共享网络和动作头权重，新建随机的 16×2048 Local query。教师独立冻结；学生优化 action flow matching + 第 4/8/12/16 层 Local 蒸馏（cosine + Gram），没有 Goal loss 或跨角色交互。
+-- GPU 5 初始启动四个同步训练 rank，共同训练一个模型；按用户最新授权取消资源阈值等待，实际 CUDA OOM 时依次减少至 3/2/1 rank 重试当前阶段。CPU Gloo 汇总梯度，rank 0 使用 CPU FP32 master AdamW 并广播更新；四个进程均映射到物理 GPU 5。micro-batch=1，有效 batch 始终为 32；4/3/2/1 rank 的样本份额分别为 [8,8,8,8]/[11,11,10]/[16,16]/[32]。每个 rank 另有 1 个数据读取 worker。
+-- 教师 1000 个 optimizer steps，仅导出 step_001000；随后自动退出教师四进程并启动学生四进程。学生 2000 个 optimizer steps，每 500 步导出，保留最新两个，最终为 step_001500 和 step_002000。不导出初始化或 best 权重。
++- 2026-10-22 按用户要求改为 GPU 4 初始启动三个同步训练 rank，共同训练一个模型；继续取消资源阈值等待，实际 CUDA OOM 时依次减少至 2/1 rank 重试当前阶段。CPU Gloo 汇总梯度，rank 0 使用 CPU FP32 master AdamW 并广播更新；三个训练进程均映射到物理 GPU 4。micro-batch=1，有效 batch 始终为 32；4/3/2/1 rank 的样本份额分别为 [8,8,8,8]/[11,11,10]/[16,16]/[32]。每个 rank 另有 1 个数据读取 worker。
++- 教师 1000 个 optimizer steps，仅导出 step_001000；随后自动退出教师训练进程并启动学生训练进程。学生 2000 个 optimizer steps，每 500 步导出，保留最新两个，最终为 step_001500 和 step_002000。不导出初始化或 best 权重。
+ - 保存的是模型、processor、统计量和来源记录，不保存 Adam 状态；因此不能用这些导出执行精确断点续训。运行目录已存在时拒绝覆盖。
+ - 峰值学习率 1e-5，Stage I/II warmup 分别为 100/200 步，余弦下降到 5%；实际预算以 run_plan.json 为准。每 250 步对固定的 128 个验证 anchor 计算损失，不额外导出权重。
+ - 训练/验证按 episode 分离，split_seed=2026；训练 260726 个 anchor。本次教师消费 32000 个、学生消费 64000 个打乱后的训练 anchor。
+ 
+-运行 `bash launch.sh --dry-run` 只显示配置与资源检查；`bash run_authorized.sh` 立即正式运行两阶段，`queue_status.json` 标记实际阶段和进程数。本次用户已授权检查通过后直接启动，并将进程数改为 4。
++运行 `bash launch.sh --dry-run` 只显示配置与资源检查；`bash run_authorized.sh` 立即正式运行两阶段，`queue_status.json` 标记实际阶段和进程数。本次用户已授权检查通过后直接启动，并将物理 GPU 改为 4、初始训练进程数改为 3。
+ 
+-运行输出：`runs/local16_teacher1000_student2000_gpu5x4_20261021/`。`pipeline.json` 标记阶段，`stage_I/status.json`、`stage_II/status.json` 标记已完成步数，`metrics.jsonl` 保存训练/验证损失，`heartbeat_*.json` 标记各 rank 当前 micro-step，`logs/` 保存四个 rank 的日志。入口日志为 `launcher.log`，tmux 会话为 `a1_libero_gpu5x4`。
++运行输出：`runs/local16_teacher1000_student2000_gpu4x3_20261022/`。`pipeline.json` 标记阶段，`stage_I/status.json`、`stage_II/status.json` 标记已完成步数，`metrics.jsonl` 保存训练/验证损失，`heartbeat_*.json` 标记各 rank 当前 micro-step，`logs/` 保存各 rank 的日志。入口日志为 `launcher_gpu4x3_20261022.log`，tmux 会话为 `a1_libero_gpu4x3`。
+ 
+ 已完成的检查记录位于 `checks/`：真实视频采样、单尺度蒸馏与冻结检查、四进程 CPU 梯度等价性、采样分片及 checkpoint 保留规则。正式启动后再由首个真实训练更新验证 CUDA 执行。原显存阈值已按用户最新要求取消，资源数据仅作记录。OOM 的失败尝试移入 failed_attempts/；当前阶段从原始初始化重新计步，Stage II 仍使用已完成的教师 step1000。
+ 
+-训练后全量推理现由独立的 `watch_full_eval.py --execute` 负责，运行在同一 tmux 会话的 `auto-eval` 窗口。它每 5 秒读取两阶段进度，只有训练 launcher 标记整体完成、Stage I=1000 / Stage II=2000、最终权重与 SHA256 校验均通过后，才在 GPU 5 启动现有 `evaluate.py --protocol full`。这不修改当前训练进程、配置或原 launcher；run_plan.json 中的 automatic_evaluation=false 仅描述原训练 launcher，外部自动评测任务以 auto_eval/<run_name>/plan.json 为准。
++训练后全量推理现由独立的 `watch_full_eval.py --execute` 负责，运行在同一 tmux 会话的 `auto-eval` 窗口。它每 5 秒读取两阶段进度，只有训练 launcher 标记整体完成、Stage I=1000 / Stage II=2000、最终权重与 SHA256 校验均通过后，才在 GPU 4 启动现有 `evaluate.py --protocol full`。评测 GPU 随本次 run_plan.json 配置；run_plan.json 中的 automatic_evaluation=false 仅描述原训练 launcher，外部自动评测任务以 auto_eval/<run_name>/plan.json 为准。
+ 
+ 全量协议是 libero_spatial / libero_object / libero_goal / libero_10 各 10 个任务，每个任务 50 回合，共 2000 回合。仅加载学生 step_002000，不加载教师、不输入未来图像。评测按任务顺序执行，遇到错误最多重试 3 次并复用已完成的 episode 记录；无视频输出。结果目录为 `evaluation/<run_name>_full40x50_step2000/`，其中 summary.json 为总结果，task_results.csv 为 40 个任务结果。监控状态、日志分别保存在 `auto_eval/<run_name>/status.json`、`watcher.log` 和 `evaluation.log`。训练尚未完成时不启动任何推理 GPU 进程。
++
++2026-10-22 重启记录：旧运行 `runs/local16_teacher1000_student2000_gpu5x4_20261021/` 保留，最后完成 step 881，step 882 在 Gloo 广播阶段超时，于 05:00 失败退出。旧运行未到 step1000，未导出教师权重。本轮从原始 LaWAM 权重重新训练，不是从 step881 续训。修改前的配置和源码及失败摘要保存在 `checks/relaunch_gpu4x3_20261022/`。新运行在根目录保存固定的 run_plan.json，两个训练阶段都读取该快照；失败状态保留已完成步数。
+--- before/run_authorized.sh
++++ after/run_authorized.sh
+@@ -2,4 +2,4 @@
+ set -euo pipefail
+ cd /mnt/hdd/wangchaoyang/LatentWAM/LaWAM_aba2_change/ablation/aba1/A1/libero
+ export PYTHONDONTWRITEBYTECODE=1
+-/home/wangchaoyang/envs/LaWAM/bin/python -B launch.py --execute 2>&1 | tee -a launcher.log
++/home/wangchaoyang/envs/LaWAM/bin/python -B launch.py --execute 2>&1 | tee -a launcher_gpu4x3_20261022.log

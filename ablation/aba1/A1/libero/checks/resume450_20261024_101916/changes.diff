@@ -1,0 +1,233 @@
+--- before/a1_local/training.py
++++ after/a1_local/training.py
+@@ -12,7 +12,7 @@
+ from .config import load_plan, run_path, atomic_json, learning_rate, source_manifest, physical_gpus, rank_device
+ from .startup import load_slot, wait_for_loaded
+ from .sampling import RankSampler, backward_weight
+-from .checkpoints import save_weights, verify_teacher
++from .checkpoints import save_weights, verify_teacher, load_student_weights
+ 
+ 
+ def main():
+@@ -70,6 +70,10 @@
+     from goal_local.train import validation_indices
+     logical_gpu, physical_gpu = rank_device(plan, rank)
+     spec, device = plan['stage_' + stage], torch.device('cuda', logical_gpu)
++    resume_source = plan.get('resume_student') if stage == 'II' else None
++    start_step = resume_source['step'] if resume_source else 0
++    if not 0 <= start_step < spec['steps']:
++        raise ValueError('Invalid student restart step')
+     def seed(value):
+         random.seed(value); np.random.seed(value); torch.manual_seed(value); torch.cuda.manual_seed(value)
+     with load_slot(plan, output, rank, stage):
+@@ -98,6 +102,12 @@
+         else:
+             model = make_stage_two(GoalLocalPolicy.load(teacher_source['path']), cfg)
+             policy = model.student
++            if resume_source:
++                loaded_step = load_student_weights(policy, resume_source)
++                if loaded_step != start_step:
++                    raise ValueError('Loaded student step mismatch')
++                atomic_json(output / f'resume_rank_{rank}.json', dict(resume_source, rank=rank,
++                    loaded_at=time.time(), strict=True, next_step=start_step+1))
+             assert tuple(policy.q_local.shape) == (16, 2048)
+             assert not any(p.requires_grad for p in model.teacher.parameters())
+             assert not {p.data_ptr() for p in policy.parameters()} & {p.data_ptr() for p in model.teacher.parameters()}
+@@ -105,7 +115,7 @@
+         assert not hasattr(policy, 'gate') and not hasattr(policy, 'q_goal')
+         model.to(device)
+         atomic_json(output / f'worker_{rank}.json', dict(rank=rank, pid=os.getpid(), physical_gpu=physical_gpu,
+-                    logical_gpu=logical_gpu, stage=stage, phase='model_loaded', cuda_allocated_gib=torch.cuda.memory_allocated()/1024**3))
++                    logical_gpu=logical_gpu, stage=stage, phase='model_loaded', resume_step=start_step, cuda_allocated_gib=torch.cuda.memory_allocated()/1024**3))
+         gc.collect(); torch.cuda.empty_cache()
+     if plan.get('model_load_strategy') == 'rank_serial':
+         wait_for_loaded(plan, output)
+@@ -137,19 +147,20 @@
+     if rank == 0:
+         atomic_json(output / 'data_audit.json', dict(**data.audit(), local=True, goal=False,
+                     future_offsets=[8], train_anchors=len(data), validation_anchors=len(validation),
+-                    consumed_train_anchors=spec['steps']*plan['global_batch']))
++                    consumed_train_anchors=spec['steps']*plan['global_batch'], start_step=start_step,
++                    remaining_train_anchors=(spec['steps']-start_step)*plan['global_batch']))
+         atomic_json(output / 'validation_indices.json', chosen)
+     workers = plan['loader_workers_per_rank']
+     options = dict(num_workers=workers, pin_memory=True)
+     if workers:
+         options.update(multiprocessing_context='spawn', prefetch_factor=1, persistent_workers=True)
+-    sampler = RankSampler(len(data), spec['steps'], rank, cfg['seed'], plan['world_size'], plan['global_batch'])
++    sampler = RankSampler(len(data), spec['steps'], rank, cfg['seed'], plan['world_size'], plan['global_batch'], start_step=start_step)
+     loader = DataLoader(data, batch_size=1, sampler=sampler,
+         generator=torch.Generator().manual_seed(cfg['seed']+rank), **options)
+     # Validation uses the main process, avoiding a second set of video decoder workers.
+     val_loader = DataLoader(Subset(validation, chosen[rank::plan['world_size']]), batch_size=1, num_workers=0)
+     fields = ['loss', 'flow'] + (['local_distill'] if stage == 'II' else [])
+-    step = 0
++    step = start_step
+     started = time.time()
+     def status(phase):
+         if rank == 0:
+@@ -179,7 +190,7 @@
+             restore_rng(state); model.train()
+     iterator = iter(loader)
+     status('training')
+-    for step in range(1, spec['steps']+1):
++    for step in range(start_step+1, spec['steps']+1):
+         tick = time.monotonic()
+         model.train(); optimizer.zero_grad()
+         values = torch.zeros(len(fields)+1, dtype=torch.float64)
+@@ -210,7 +221,7 @@
+             status('saving'); dist.barrier()
+             if rank == 0:
+                 save_weights(policy, output, stage, step, spec, dict(protocol=plan['protocol'],
+-                    teacher_source=teacher_source, global_batch=plan['global_batch'], world_size=plan['world_size'],
++                    teacher_source=teacher_source, resume_source=resume_source, global_batch=plan['global_batch'], world_size=plan['world_size'],
+                     run_plan=plan, source_manifest=source_manifest(), frozen_parameters_unchanged=True))
+             dist.barrier(); status('training')
+     assert next(iterator, None) is None
+--- before/a1_local/checkpoints.py
++++ after/a1_local/checkpoints.py
+@@ -1,5 +1,6 @@
+ """Atomic model-only exports; no initial/best/optimizer checkpoints."""
+ import json
++import os
+ import shutil
+ from pathlib import Path
+ 
+@@ -74,3 +75,60 @@
+     if file_sha256(path / "model.pt") != marker["model_sha256"]:
+         raise ValueError("Teacher checksum mismatch")
+     return dict(path=str(path), step=expected_step, model_sha256=marker["model_sha256"])
++
++
++def verify_student(path, cfg, teacher, spec):
++    """Validate a model-only restart, including its completed teacher lineage."""
++    from goal_local.eval_common import model_metadata
++    from ablation.aba1.libero_common.config import FORMAT
++    path = Path(path).resolve()
++    marker = json.loads((path/'checkpoint_complete.json').read_text())
++    step = marker.get('step')
++    if ((marker.get('owner'), marker.get('stage'), marker.get('mode')) != (OWNER, 'II', 'student')
++            or type(step) is not int or not 0 < step < spec['steps'] or step % spec['save_every']
++            or path.name != f'step_{step:06d}' or not marker.get('weights_only')
++            or marker.get('optimizer_saved') is not False):
++        raise ValueError('Expected a completed intermediate Stage-II student checkpoint')
++    meta = model_metadata(path/'model.pt')
++    if (meta['format'], meta['mode'], meta['step'], meta['config']) != (FORMAT, 'student', step, cfg):
++        raise ValueError('Student configuration/step mismatch')
++    source = meta['extra'].get('teacher_source') or {}
++    if any(source.get(key) != teacher.get(key) for key in ('step', 'model_sha256')):
++        raise ValueError('Student teacher provenance mismatch')
++    if file_sha256(path/'model.pt') != marker['model_sha256']:
++        raise ValueError('Student checksum mismatch')
++    return dict(path=str(path), step=step, model_sha256=marker['model_sha256'],
++                weights_only=True, optimizer_restored=False, rng_restored=False)
++
++
++def seed_student_checkpoint(source, output):
++    """Seed a fresh run without modifying the failed run's checkpoint or logs."""
++    source = dict(source)
++    original = Path(source['path'])
++    destination = Path(output)/'checkpoints'/original.name
++    temporary = destination.with_name(destination.name+'.incomplete')
++    if destination.exists() or temporary.exists():
++        raise FileExistsError(destination)
++    def copy_file(src, dst):
++        if Path(src).name == 'model.pt':
++            os.link(src, dst)
++            return dst
++        return shutil.copy2(src, dst)
++    shutil.copytree(original, temporary, copy_function=copy_file)
++    temporary.rename(destination)
++    source.update(source_path=str(original), path=str(destination))
++    marker = json.loads((destination/'checkpoint_complete.json').read_text())
++    atomic_json(Path(output)/'latest.json', dict(marker, path=str(destination)))
++    atomic_json(Path(output)/'retention.json', dict(stage='II', steps=[source['step']], keep=1))
++    return source
++
++
++def load_student_weights(policy, source):
++    """Copy into the existing student only, before constructing its new optimizer."""
++    import torch
++    from ablation.aba1.libero_common.config import FORMAT
++    payload = torch.load(Path(source['path'])/'model.pt', map_location='cpu', mmap=True, weights_only=False)
++    if (payload['format'], payload['mode'], payload['step'], payload['config']) != (FORMAT, 'student', source['step'], policy.cfg):
++        raise ValueError('Resume payload configuration/step mismatch')
++    policy.load_state_dict(payload['state_dict'], strict=True)
++    return payload['step']
+--- before/a1_local/launcher.py
++++ after/a1_local/launcher.py
+@@ -9,7 +9,7 @@
+ import traceback
+ from pathlib import Path
+ from .config import WORK, ROOT, load_plan, run_path, resource_report, atomic_json, source_manifest, physical_gpus
+-from .checkpoints import verify_teacher
++from .checkpoints import verify_teacher, verify_student, seed_student_checkpoint
+ 
+ 
+ def commands(plan, output, world=None):
+@@ -58,8 +58,12 @@
+     modes.add_argument('--dry-run', action='store_true')
+     p.add_argument('--output')
+     p.add_argument('--start-stage', choices=['I','II'], default='I')
++    p.add_argument('--resume-student', type=Path)
+     args = p.parse_args()
++    if args.resume_student and args.start_stage != 'II':
++        p.error('--resume-student requires --start-stage II')
+     plan, cfg = load_plan()
++    plan.pop('resume_student', None)
+     output = run_path(plan, args.output)
+     stages = ['I','II'] if args.start_stage == 'I' else ['II']
+     report = dict(start_stage=args.start_stage, stages=stages, plan=plan, config=cfg, output=str(output), resources=resource_report(plan),
+@@ -76,6 +80,12 @@
+     teacher = validate_start(output, cfg, args.start_stage)
+     if teacher is not None:
+         report['imported_teacher'] = teacher
++    if args.resume_student:
++        source = verify_student(args.resume_student, cfg, teacher, plan['stage_II'])
++        plan['resume_student'] = seed_student_checkpoint(source, output/'stage_II')
++        atomic_json(output/'stage_II/resume_source.json', plan['resume_student'])
++        atomic_json(output/'stage_II/status.json', dict(phase='loading', stage='II', step=source['step'],
++            target_steps=plan['stage_II']['steps'], updated_at=time.time()))
+     atomic_json(output/'launch.json', report)
+     atomic_json(output/'run_plan.json', plan)
+     atomic_json(output/'source_manifest.json', source_manifest())
+--- before/a1_local/sampling.py
++++ after/a1_local/sampling.py
+@@ -2,21 +2,22 @@
+ 
+ 
+ class RankSampler:
+-    def __init__(self, size, steps, rank, seed, world=4, batch=32):
+-        if not 0 <= rank < world or steps * batch > size:
++    def __init__(self, size, steps, rank, seed, world=4, batch=32, start_step=0):
++        if not 0 <= rank < world or steps * batch > size or not 0 <= start_step <= steps:
+             raise ValueError("This run must fit within one shuffled epoch")
+         self.size, self.steps, self.rank = size, steps, rank
+         self.seed, self.world, self.batch = seed, world, batch
++        self.start_step = start_step
+ 
+     def __iter__(self):
+         import torch
+         order = torch.randperm(self.size, generator=torch.Generator().manual_seed(self.seed)).tolist()
+-        for step in range(self.steps):
++        for step in range(self.start_step, self.steps):
+             indices = order[step*self.batch:(step+1)*self.batch]
+             yield from indices[self.rank::self.world]
+ 
+     def __len__(self):
+-        return self.steps * len(range(self.rank, self.batch, self.world))
++        return (self.steps-self.start_step) * len(range(self.rank, self.batch, self.world))
+ 
+ 
+ def backward_weight(world=4, global_batch=32):
+--- before/monitor.py
++++ after/monitor.py
+@@ -124,7 +124,7 @@
+         lines += ['', 'GPU 状态暂不可读；训练进度仍正常刷新']
+     if pipeline.get('phase') == 'failed':
+         lines += ['', '失败信息：'+pipeline.get('error','请查看 train-log 窗口').strip().splitlines()[-1]]
+-    lines += ['', '教师仅保存 1000；学生每 500 步保存，保留最近两份。',
++    lines += ['', f'教师仅保存 1000；学生每 {plan["stage_II"]["save_every"]} 步保存，保留最近 {plan["stage_II"]["keep"]} 份。',
+               'ETA 按近期训练速度估算，不含验证、保存和 OOM 重试开销。',
+               'Ctrl+b 然后 d：退出查看，训练与进度窗口继续后台运行。',
+               'Ctrl+b 然后 0：训练日志；Ctrl+b 然后 1：本进度窗口。',
